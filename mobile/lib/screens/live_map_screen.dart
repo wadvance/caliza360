@@ -15,7 +15,6 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   bool _isLoading = true;
   double _radiusKm = 2;
   final ApiService _apiService = ApiService();
-  final Map<String, BitmapDescriptor> _markerIcons = {};
 
   static const double _defaultLat = 8.5190;
   static const double _defaultLng = -80.3570;
@@ -23,7 +22,6 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   @override
   void initState() {
     super.initState();
-    _loadIcons();
     _loadFleet();
     _startPolling();
   }
@@ -34,23 +32,17 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
     super.dispose();
   }
 
-  Future<void> _loadIcons() async {
-    _markerIcons['in_quarry'] = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(48, 48)),
-      'assets/marker_yellow.png',
-    );
-    _markerIcons['on_route'] = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(48, 48)),
-      'assets/marker_blue.png',
-    );
-    _markerIcons['at_destination'] = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(48, 48)),
-      'assets/marker_green.png',
-    );
-    _markerIcons['unknown'] = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(48, 48)),
-      'assets/marker_gray.png',
-    );
+  BitmapDescriptor _markerIcon(String zone) {
+    switch (zone) {
+      case 'in_quarry':
+        return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange);
+      case 'on_route':
+        return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
+      case 'at_destination':
+        return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+      default:
+        return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGray);
+    }
   }
 
   Future<void> _loadFleet() async {
@@ -169,7 +161,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
             title: unit['truck_plate'] ?? 'Sin placa',
             snippet: '${unit['driver_name'] ?? 'N/A'} | ${_zoneLabel(zone)} | ${unit['status']}',
           ),
-          icon: _markerIcons[zone] ?? BitmapDescriptor.defaultMarker,
+          icon: _markerIcon(zone),
         ),
       );
     }
