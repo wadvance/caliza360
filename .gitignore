@@ -39,6 +39,7 @@ web/.firebase/
 
 # Tuneles
 tunnel*.log
+cloudflared.exe
 
 # Otros
 *.apk

@@ -5,6 +5,8 @@ on:
     branches: [master]
     paths:
       - 'web/**'
+      - 'firebase.json'
+      - '.firebaserc'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
@@ -38,10 +40,9 @@ jobs:
         run: npm run build
 
       - name: Desplegar a Firebase Hosting
-        working-directory: web
-        run: |
-          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" > /tmp/firebase-sa.json
-          export GOOGLE_APPLICATION_CREDENTIALS=/tmp/firebase-sa.json
-          npx firebase-tools deploy --only hosting
+        uses: w9jds/firebase-action@v15.25.1
+        with:
+          args: deploy --only hosting
         env:
+          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           PROJECT_ID: caliza360
