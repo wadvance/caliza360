@@ -64,11 +64,37 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       }
     } catch (e) {
       if (mounted) {
-        setState(() {
-          _isLoading = false;
-          _errorMessage = 'No se pudo conectar con el servidor de telemetría. Verifica tu conexión a internet e intenta de nuevo.';
-        });
+        setState(() => _isLoading = false);
       }
+      _retryLoad();
+    }
+  }
+
+  Future<void> _retryLoad() async {
+    for (int i = 1; i <= 3; i++) {
+      await Future.delayed(Duration(seconds: i * 3));
+      if (!mounted) return;
+      try {
+        final data = await _apiService.getFleetLive(radiusKm: _radiusKm);
+        if (mounted) {
+          setState(() {
+            _fleetData = data;
+            _isLoading = false;
+            _errorMessage = '';
+          });
+          _centerMapOnFleet(data);
+          return;
+        }
+      } catch (_) {
+        if (mounted) {
+          setState(() => _errorMessage =
+              'Reintentando... ($i/3) No se pudo conectar con el servidor de telemetría.');
+        }
+      }
+    }
+    if (mounted) {
+      setState(() => _errorMessage =
+          'No se pudo conectar con el servidor de telemetría. Verifica tu conexión a internet e intenta de nuevo.');
     }
   }
 
