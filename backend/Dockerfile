@@ -36,11 +36,12 @@ RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoload
 RUN mkdir -p storage/framework/{sessions,views,cache} \
   && chmod -R 777 storage bootstrap/cache
 
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY docker/supervisord.conf /etc/supervisord.conf
-COPY docker/www.conf /usr/local/etc/php-fpm.d/zz-www.conf
-COPY docker/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Copiar archivos de configuración desde el directorio ya copiado
+RUN cp docker/nginx.conf /etc/nginx/nginx.conf \
+  && cp docker/supervisord.conf /etc/supervisord.conf \
+  && cp docker/www.conf /usr/local/etc/php-fpm.d/zz-www.conf \
+  && cp docker/entrypoint.sh /entrypoint.sh \
+  && chmod +x /entrypoint.sh
 
 EXPOSE 8080
 
