@@ -515,4 +515,16 @@ class ApiService {
     }
     throw Exception('Error al registrar control de calidad');
   }
+
+  Future<Map<String, dynamic>> getFleetLive({double radiusKm = 2}) async {
+    final headers = await _getHeaders();
+    final response = await http.get(
+      Uri.parse('$baseUrl/fleet/live?radius_km=$radiusKm'),
+      headers: headers,
+    );
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    }
+    throw Exception('Error al obtener flota en vivo');
+  }
 }

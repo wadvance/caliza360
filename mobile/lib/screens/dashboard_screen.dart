@@ -198,22 +198,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           setState(() {
             _selectedIndex = index;
           });
-          switch (index) {
-            case 0:
-              // Dashboard - already here
-              break;
-            case 1:
-              Navigator.pushNamed(context, '/trips');
-              break;
-            case 2:
-              Navigator.pushNamed(context, '/profile');
-              break;
-            case 3:
-              Navigator.pushNamed(context, '/settings');
-              break;
+          final routes = ['/dashboard', '/trips'];
+          if (_screens.contains('live-map')) {
+            routes.add('/live-map');
+          }
+          routes.addAll(['/profile', '/settings']);
+          if (index < routes.length) {
+            Navigator.pushNamed(context, routes[index]);
           }
         },
-        destinations: const [
+        destinations: [
           NavigationDestination(
             icon: Icon(Icons.dashboard_outlined),
             selectedIcon: Icon(Icons.dashboard),
@@ -224,6 +218,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             selectedIcon: Icon(Icons.local_shipping),
             label: 'Viajes',
           ),
+          if (_screens.contains('live-map'))
+            NavigationDestination(
+              icon: Icon(Icons.map_outlined),
+              selectedIcon: Icon(Icons.map),
+              label: 'Mapa',
+            ),
           NavigationDestination(
             icon: Icon(Icons.person_outline),
             selectedIcon: Icon(Icons.person),

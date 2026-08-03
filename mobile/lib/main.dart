@@ -9,6 +9,7 @@ import 'screens/settings_screen.dart';
 import 'screens/proformas_screen.dart';
 import 'screens/controls_screen.dart';
 import 'screens/dispatches_screen.dart';
+import 'screens/live_map_screen.dart';
 import 'services/notification_service.dart';
 
 void main() async {
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
         '/proformas': (context) => const ProformasScreen(),
         '/controls': (context) => const ControlsScreen(),
         '/dispatches': (context) => const DispatchesScreen(),
+        '/live-map': (context) => const LiveMapScreen(),
         '/profile': (context) => const ProfileScreen(),
         '/settings': (context) => const SettingsScreen(),
       },
