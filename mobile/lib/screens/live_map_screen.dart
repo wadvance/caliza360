@@ -13,6 +13,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   GoogleMapController? _mapController;
   Map<String, dynamic>? _fleetData;
   bool _isLoading = true;
+  String _errorMessage = '';
   double _radiusKm = 2;
   final ApiService _apiService = ApiService();
 
@@ -46,6 +47,12 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   }
 
   Future<void> _loadFleet() async {
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+        _errorMessage = '';
+      });
+    }
     try {
       final data = await _apiService.getFleetLive(radiusKm: _radiusKm);
       if (mounted) {
@@ -57,7 +64,10 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       }
     } catch (e) {
       if (mounted) {
-        setState(() => _isLoading = false);
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'No se pudo conectar con el servidor de telemetría. Verifica tu conexión a internet e intenta de nuevo.';
+        });
       }
     }
   }
@@ -214,6 +224,11 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+          tooltip: 'Regresar al menú',
+        ),
         title: const Text('Mapa de Flota'),
         backgroundColor: const Color(0xFF2563EB),
         foregroundColor: Colors.white,
@@ -225,35 +240,59 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          GoogleMap(
-            onMapCreated: (controller) {
-              _mapController = controller;
-              if (_fleetData != null) {
-                _centerMapOnFleet(_fleetData!);
-              }
-            },
-            initialCameraPosition: const CameraPosition(
-              target: LatLng(_defaultLat, _defaultLng),
-              zoom: 12,
-            ),
-            markers: _buildMarkers(),
-            polylines: _buildPolylines(),
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
-            zoomControlsEnabled: true,
-          ),
-          if (_isLoading)
-            const Center(child: CircularProgressIndicator()),
-          Positioned(
-            bottom: 16,
-            left: 16,
-            right: 16,
-            child: _buildLegend(),
-          ),
-        ],
-      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _errorMessage.isNotEmpty
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.wifi_off, size: 64, color: Colors.grey[400]),
+                        const SizedBox(height: 16),
+                        Text(
+                          _errorMessage,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 16, color: Colors.grey),
+                        ),
+                        const SizedBox(height: 24),
+                        ElevatedButton.icon(
+                          onPressed: _loadFleet,
+                          icon: const Icon(Icons.refresh),
+                          label: const Text('Reintentar'),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : Stack(
+                  children: [
+                    GoogleMap(
+                      onMapCreated: (controller) {
+                        _mapController = controller;
+                        if (_fleetData != null) {
+                          _centerMapOnFleet(_fleetData!);
+                        }
+                      },
+                      initialCameraPosition: const CameraPosition(
+                        target: LatLng(_defaultLat, _defaultLng),
+                        zoom: 12,
+                      ),
+                      markers: _buildMarkers(),
+                      polylines: _buildPolylines(),
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: true,
+                      zoomControlsEnabled: true,
+                    ),
+                    Positioned(
+                      bottom: 16,
+                      left: 16,
+                      right: 16,
+                      child: _buildLegend(),
+                    ),
+                  ],
+                ),
     );
   }
 
