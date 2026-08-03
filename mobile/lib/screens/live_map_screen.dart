@@ -42,7 +42,7 @@ class _LiveMapScreenState extends State<LiveMapScreen> {
       case 'at_destination':
         return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
       default:
-        return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGray);
+        return BitmapDescriptor.defaultMarker;
     }
   }
 
