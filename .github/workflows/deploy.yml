@@ -41,7 +41,7 @@ jobs:
         uses: w9jds/firebase-action@v15.25.1
         with:
           args: deploy --only hosting
-          firebase_location: web
+          entryPoint: web
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           PROJECT_ID: caliza360
