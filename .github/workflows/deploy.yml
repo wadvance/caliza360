@@ -12,9 +12,6 @@ jobs:
   build-and-deploy:
     name: Build y Deploy
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: web
 
     steps:
       - name: Checkout código
@@ -28,19 +25,23 @@ jobs:
           cache-dependency-path: web/package-lock.json
 
       - name: Instalar dependencias
+        working-directory: web
         run: npm ci
 
       - name: Crear .env.production con URL del API
+        working-directory: web
         run: |
           echo "VITE_API_URL=${{ secrets.VITE_API_URL }}" > .env.production
 
       - name: Build de producción
+        working-directory: web
         run: npm run build
 
       - name: Desplegar a Firebase Hosting
         uses: w9jds/firebase-action@v15.25.1
         with:
           args: deploy --only hosting
+          firebase_location: web
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           PROJECT_ID: caliza360
