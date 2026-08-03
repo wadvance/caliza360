@@ -10,7 +10,6 @@ services:
     plan: free
     repo: https://github.com/wadvance/calizalososos
     dockerfilePath: ./backend/Dockerfile
-    dockerContext: ./backend
     healthCheckPath: /api/up
     envVars:
       - key: APP_ENV
