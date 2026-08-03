@@ -3,14 +3,17 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  // Configurable base URL. Override at build time with:
-  //   flutter run --dart-define=API_BASE_URL=http://192.168.1.50:8000/api
-  // Default uses 10.0.2.2 so the Android emulator reaches the host machine.
-  static const String baseUrl = String.fromEnvironment(
+  static const String _defaultBaseUrl = 'http://10.0.2.2:8000/api';
+  static const String _compiledBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
     defaultValue: 'http://10.0.2.2:8000/api',
   );
   String? _token;
+
+  Future<String> get _baseUrl async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('server_url') ?? _compiledBaseUrl;
+  }
 
   Future<String?> get token async {
     if (_token != null) return _token;
@@ -28,9 +31,14 @@ class ApiService {
     };
   }
 
+  Future<Uri> _url(String path) async {
+    final base = await _baseUrl;
+    return Uri.parse('$base$path');
+  }
+
   Future<Map<String, dynamic>> login(String email, String password) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/auth/login'),
+      await _url('auth/login'),
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
       body: jsonEncode({'email': email, 'password': password}),
     );
@@ -64,7 +72,7 @@ class ApiService {
   Future<void> logout() async {
     final headers = await _getHeaders();
     await http.post(
-      Uri.parse('$baseUrl/auth/logout'),
+      await _url('auth/logout'),
       headers: headers,
     );
     _token = null;
@@ -77,7 +85,7 @@ class ApiService {
   Future<Map<String, dynamic>> getDashboard() async {
     final headers = await _getHeaders();
     final response = await http.get(
-      Uri.parse('$baseUrl/dashboard'),
+      await _url('dashboard'),
       headers: headers,
     );
     if (response.statusCode == 200) {
@@ -89,7 +97,7 @@ class ApiService {
   Future<List<dynamic>> getTrips() async {
     final headers = await _getHeaders();
     final response = await http.get(
-      Uri.parse('$baseUrl/trips'),
+      await _url('trips'),
       headers: headers,
     );
     if (response.statusCode == 200) {
@@ -101,7 +109,7 @@ class ApiService {
   Future<Map<String, dynamic>> getTrip(String id) async {
     final headers = await _getHeaders();
     final response = await http.get(
-      Uri.parse('$baseUrl/trips/$id'),
+      await _url('trips/$id'),
       headers: headers,
     );
     if (response.statusCode == 200) {
@@ -113,7 +121,7 @@ class ApiService {
   Future<Map<String, dynamic>> startTrip(String tripId) async {
     final headers = await _getHeaders();
     final response = await http.put(
-      Uri.parse('$baseUrl/trips/$tripId/start'),
+      await _url('trips/$tripId/start'),
       headers: headers,
     );
     if (response.statusCode == 200) {
@@ -125,7 +133,7 @@ class ApiService {
   Future<Map<String, dynamic>> deliverTrip(String tripId) async {
     final headers = await _getHeaders();
     final response = await http.put(
-      Uri.parse('$baseUrl/trips/$tripId/deliver'),
+      await _url('trips/$tripId/deliver'),
       headers: headers,
     );
     if (response.statusCode == 200) {
@@ -137,7 +145,7 @@ class ApiService {
   Future<Map<String, dynamic>> returnTrip(String tripId) async {
     final headers = await _getHeaders();
     final response = await http.put(
-      Uri.parse('$baseUrl/trips/$tripId/return'),
+      await _url('trips/$tripId/return'),
       headers: headers,
     );
     if (response.statusCode == 200) {
@@ -149,7 +157,7 @@ class ApiService {
   Future<Map<String, dynamic>> updateProfile(Map<String, dynamic> data) async {
     final headers = await _getHeaders();
     final response = await http.put(
-      Uri.parse('$baseUrl/auth/profile'),
+      await _url('auth/profile'),
       headers: headers,
       body: jsonEncode(data),
     );
@@ -162,7 +170,7 @@ class ApiService {
   Future<Map<String, dynamic>> updatePassword(Map<String, dynamic> data) async {
     final headers = await _getHeaders();
     final response = await http.put(
-      Uri.parse('$baseUrl/auth/password'),
+      await _url('auth/password'),
       headers: headers,
       body: jsonEncode(data),
     );
@@ -175,7 +183,7 @@ class ApiService {
   Future<Map<String, dynamic>> cancelTrip(String tripId) async {
     final headers = await _getHeaders();
     final response = await http.put(
-      Uri.parse('$baseUrl/trips/$tripId/cancel'),
+      await _url('trips/$tripId/cancel'),
       headers: headers,
     );
     if (response.statusCode == 200) {
@@ -188,21 +196,21 @@ class ApiService {
 
   Future<List<dynamic>> getTrucks() async {
     final headers = await _getHeaders();
-    final response = await http.get(Uri.parse('$baseUrl/trucks'), headers: headers);
+    final response = await http.get(await _url('trucks'), headers: headers);
     if (response.statusCode == 200) return jsonDecode(response.body);
     throw Exception('Error al obtener camiones');
   }
 
   Future<List<dynamic>> getDrivers() async {
     final headers = await _getHeaders();
-    final response = await http.get(Uri.parse('$baseUrl/drivers'), headers: headers);
+    final response = await http.get(await _url('drivers'), headers: headers);
     if (response.statusCode == 200) return jsonDecode(response.body);
     throw Exception('Error al obtener conductores');
   }
 
   Future<List<dynamic>> getClients() async {
     final headers = await _getHeaders();
-    final response = await http.get(Uri.parse('$baseUrl/clients'), headers: headers);
+    final response = await http.get(await _url('clients'), headers: headers);
     if (response.statusCode == 200) return jsonDecode(response.body);
     throw Exception('Error al obtener clientes');
   }
@@ -212,7 +220,7 @@ class ApiService {
   Future<List<dynamic>> getPanamaLocations() async {
     final headers = await _getHeaders();
     final response = await http.get(
-      Uri.parse('$baseUrl/panama/locations'),
+      await _url('panama/locations'),
       headers: headers,
     );
     if (response.statusCode == 200) {
@@ -227,7 +235,7 @@ class ApiService {
   Future<List<dynamic>> getProformas(String date) async {
     final headers = await _getHeaders();
     final response = await http.get(
-      Uri.parse('$baseUrl/proformas?date=$date'),
+      await _url('proformas?date=$date'),
       headers: headers,
     );
     if (response.statusCode == 200) return jsonDecode(response.body);
@@ -237,7 +245,7 @@ class ApiService {
   Future<Map<String, dynamic>> createProforma(Map<String, dynamic> data) async {
     final headers = await _getHeaders();
     final response = await http.post(
-      Uri.parse('$baseUrl/proformas'),
+      await _url('proformas'),
       headers: headers,
       body: jsonEncode(data),
     );
@@ -248,7 +256,7 @@ class ApiService {
   Future<Map<String, dynamic>> updateProforma(String id, Map<String, dynamic> data) async {
     final headers = await _getHeaders();
     final response = await http.put(
-      Uri.parse('$baseUrl/proformas/$id'),
+      await _url('proformas/$id'),
       headers: headers,
       body: jsonEncode(data),
     );
@@ -266,7 +274,7 @@ class ApiService {
   }) async {
     final headers = await _getHeaders();
     final response = await http.post(
-      Uri.parse('$baseUrl/proformas/$proformaId/location'),
+      await _url('proformas/$proformaId/location'),
       headers: headers,
       body: jsonEncode({
         'latitude': latitude,
@@ -285,7 +293,7 @@ class ApiService {
   Future<Map<String, dynamic>> getProformaLocation(String proformaId) async {
     final headers = await _getHeaders();
     final response = await http.get(
-      Uri.parse('$baseUrl/proformas/$proformaId/location'),
+      await _url('proformas/$proformaId/location'),
       headers: headers,
     );
     if (response.statusCode == 200) return jsonDecode(response.body);
@@ -296,7 +304,7 @@ class ApiService {
   Future<Map<String, dynamic>> getProformaTracking(String proformaId) async {
     final headers = await _getHeaders();
     final response = await http.get(
-      Uri.parse('$baseUrl/proformas/$proformaId/tracking'),
+      await _url('proformas/$proformaId/tracking'),
       headers: headers,
     );
     if (response.statusCode == 200) return jsonDecode(response.body);
@@ -309,7 +317,7 @@ class ApiService {
     final headers = await _getHeaders();
     final qs = params.entries.map((e) => '${e.key}=${e.value}').join('&');
     final response = await http.get(
-      Uri.parse('$baseUrl/controls${qs.isEmpty ? '' : '?$qs'}'),
+      await _url('controls${qs.isEmpty ? '' : '?$qs'}'),
       headers: headers,
     );
     if (response.statusCode == 200) return jsonDecode(response.body);
@@ -319,7 +327,7 @@ class ApiService {
   Future<Map<String, dynamic>> createControl(Map<String, dynamic> data) async {
     final headers = await _getHeaders();
     final response = await http.post(
-      Uri.parse('$baseUrl/controls'),
+      await _url('controls'),
       headers: headers,
       body: jsonEncode(data),
     );
@@ -332,7 +340,7 @@ class ApiService {
   Future<List<dynamic>> getDispatches(String date) async {
     final headers = await _getHeaders();
     final response = await http.get(
-      Uri.parse('$baseUrl/dispatches?date=$date'),
+      await _url('dispatches?date=$date'),
       headers: headers,
     );
     if (response.statusCode == 200) return jsonDecode(response.body);
@@ -342,7 +350,7 @@ class ApiService {
   Future<Map<String, dynamic>> createDispatch(Map<String, dynamic> data) async {
     final headers = await _getHeaders();
     final response = await http.post(
-      Uri.parse('$baseUrl/dispatches'),
+      await _url('dispatches'),
       headers: headers,
       body: jsonEncode(data),
     );
@@ -377,7 +385,7 @@ class ApiService {
   }) async {
     final headers = await _getHeaders();
     final response = await http.post(
-      Uri.parse('$baseUrl/trips/$tripId/location'),
+      await _url('trips/$tripId/location'),
       headers: headers,
       body: jsonEncode({
         'latitude': latitude,
@@ -399,7 +407,7 @@ class ApiService {
   ) async {
     final headers = await _getHeaders();
     final response = await http.post(
-      Uri.parse('$baseUrl/trips/$tripId/location'),
+      await _url('trips/$tripId/location'),
       headers: headers,
       body: jsonEncode({
         'locations': locations,
@@ -414,7 +422,7 @@ class ApiService {
   Future<Map<String, dynamic>> getTripLocation(String tripId) async {
     final headers = await _getHeaders();
     final response = await http.get(
-      Uri.parse('$baseUrl/trips/$tripId/location'),
+      await _url('trips/$tripId/location'),
       headers: headers,
     );
     if (response.statusCode == 200) {
@@ -427,7 +435,7 @@ class ApiService {
   Future<Map<String, dynamic>> getTripTracking(String tripId) async {
     final headers = await _getHeaders();
     final response = await http.get(
-      Uri.parse('$baseUrl/trips/$tripId/tracking'),
+      await _url('trips/$tripId/tracking'),
       headers: headers,
     );
     if (response.statusCode == 200) {
@@ -445,7 +453,7 @@ class ApiService {
   }) async {
     final headers = await _getHeaders();
     final response = await http.post(
-      Uri.parse('$baseUrl/trips/$tripId/evidence'),
+      await _url('trips/$tripId/evidence'),
       headers: headers,
       body: jsonEncode({
         'signature': signatureBase64,
@@ -466,7 +474,7 @@ class ApiService {
   }) async {
     final headers = await _getHeaders();
     final response = await http.post(
-      Uri.parse('$baseUrl/trips/$tripId/gross'),
+      await _url('trips/$tripId/gross'),
       headers: headers,
       body: jsonEncode({'gross_weight': grossWeight}),
     );
@@ -482,7 +490,7 @@ class ApiService {
   }) async {
     final headers = await _getHeaders();
     final response = await http.post(
-      Uri.parse('$baseUrl/trips/$tripId/tare'),
+      await _url('trips/$tripId/tare'),
       headers: headers,
       body: jsonEncode({'tare_weight': tareWeight}),
     );
@@ -501,7 +509,7 @@ class ApiService {
   }) async {
     final headers = await _getHeaders();
     final response = await http.post(
-      Uri.parse('$baseUrl/trips/$tripId/quality'),
+      await _url('trips/$tripId/quality'),
       headers: headers,
       body: jsonEncode({
         'quality_status': qualityStatus,
@@ -519,7 +527,7 @@ class ApiService {
   Future<Map<String, dynamic>> getFleetLive({double radiusKm = 2}) async {
     final headers = await _getHeaders();
     final response = await http.get(
-      Uri.parse('$baseUrl/fleet/live?radius_km=$radiusKm'),
+      await _url('fleet/live?radius_km=$radiusKm'),
       headers: headers,
     );
     if (response.statusCode == 200) {
