@@ -13,7 +13,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _notificationsEnabled = true;
   bool _autoSync = true;
-  String _serverUrl = 'https://caliza360-api.onrender.com';
+  String _serverUrl = 'https://caliza360-api.onrender.com/api';
   int _pendingSyncCount = 0;
   String _lastSync = 'Nunca';
   bool _isSyncing = false;
@@ -239,7 +239,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       initialValue: _serverUrl,
                       decoration: InputDecoration(
                         labelText: 'URL del servidor',
-                        hintText: 'https://caliza360-api.onrender.com',
+                        hintText: 'https://caliza360-api.onrender.com/api',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
