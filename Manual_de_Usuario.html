@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Manual de Usuario - Caliza Los Osos</title>
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 16mm 20mm 16mm;
+    @bottom-center { content: "Caliza Los Osos · Manual de Usuario · Página " counter(page) " de " counter(pages); font-size: 8pt; color: #666; }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Calibri, Arial, sans-serif; font-size: 10.5pt; color: #1f2937; line-height: 1.5; }
+  .cover { page-break-after: always; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 55%, #2563eb 100%); color: #fff; border-radius: 12px; padding: 40px; }
+  .cover h1 { font-size: 34pt; margin-bottom: 8px; }
+  .cover .sub { font-size: 14pt; opacity: .9; margin-bottom: 30px; }
+  .cover .badge { font-size: 10pt; background: rgba(255,255,255,.15); padding: 6px 16px; border-radius: 999px; }
+  .cover .meta { margin-top: 40px; font-size: 10pt; opacity: .85; line-height: 1.8; }
+  h1 { font-size: 20pt; color: #1e3a8a; margin: 24px 0 12px; border-bottom: 3px solid #2563eb; padding-bottom: 6px; }
+  h2 { font-size: 14pt; color: #1d4ed8; margin: 18px 0 8px; }
+  h3 { font-size: 11.5pt; color: #111827; margin: 12px 0 6px; }
+  p { margin-bottom: 8px; }
+  ul, ol { margin: 4px 0 10px 22px; }
+  li { margin-bottom: 3px; }
+  .toc { page-break-after: always; }
+  .toc ol { list-style: none; margin-left: 0; }
+  .toc li { padding: 5px 0; border-bottom: 1px dashed #e5e7eb; }
+  .toc a { color: #1d4ed8; text-decoration: none; }
+  .toc .n { display: inline-block; width: 26px; font-weight: 700; color: #1e3a8a; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0 16px; font-size: 9.5pt; }
+  th { background: #1d4ed8; color: #fff; padding: 6px 8px; text-align: left; }
+  td { border: 1px solid #d1d5db; padding: 5px 8px; vertical-align: top; }
+  tr:nth-child(even) td { background: #f3f4f6; }
+  .note { background: #eff6ff; border-left: 4px solid #2563eb; padding: 10px 12px; border-radius: 4px; margin: 10px 0; }
+  .warn { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 10px 12px; border-radius: 4px; margin: 10px 0; }
+  .kbd { background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 4px; padding: 1px 6px; font-family: Consolas, monospace; font-size: 9pt; }
+  .step { margin: 4px 0; }
+  .section { page-break-inside: avoid; }
+  .pagebreak { page-break-before: always; }
+  .cred { font-family: Consolas, monospace; font-size: 9.5pt; background: #f3f4f6; padding: 1px 5px; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ============ PORTADA ============ -->
+<div class="cover">
+  <h1>Caliza Los Osos</h1>
+  <div class="sub">Sistema Integral de Gestión de Cantera y Planta</div>
+  <div class="badge">Manual de Usuario</div>
+  <div class="meta">
+    Versión 1.0 &nbsp;·&nbsp; Panamá, 2026<br>
+    David - Chiriquí
+  </div>
+</div>
+
+<!-- ============ ÍNDICE ============ -->
+<div class="toc">
+  <h1>Contenido</h1>
+  <ol>
+    <li><span class="n">1</span><a href="#intro">Introducción al Sistema</a></li>
+    <li><span class="n">2</span><a href="#acceso">Acceso al Sistema</a></li>
+    <li><span class="n">3</span><a href="#roles">Roles y Usuarios</a></li>
+    <li><span class="n">4</span><a href="#dashboard">Dashboard en Vivo</a></li>
+    <li><span class="n">5</span><a href="#camiones">Camiones</a></li>
+    <li><span class="n">6</span><a href="#conductores">Conductores</a></li>
+    <li><span class="n">7</span><a href="#viajes">Viajes</a></li>
+    <li><span class="n">8</span><a href="#proformas">Proformas de Carga</a></li>
+    <li><span class="n">9</span><a href="#controles">Controles Cantera / Planta</a></li>
+    <li><span class="n">10</span><a href="#despachos">Despachos de Producción</a></li>
+    <li><span class="n">11</span><a href="#mapa">Mapa en Vivo</a></li>
+    <li><span class="n">12</span><a href="#clientes">Clientes</a></li>
+    <li><span class="n">13</span><a href="#proveedores">Proveedores</a></li>
+    <li><span class="n">14</span><a href="#inventario">Inventario (incluye Oficina)</a></li>
+    <li><span class="n">15</span><a href="#facturacion">Facturación</a></li>
+    <li><span class="n">16</span><a href="#contabilidad">Contabilidad</a></li>
+    <li><span class="n">17</span><a href="#nomina">Nómina y Pagos Extra</a></li>
+    <li><span class="n">18</span><a href="#notas">Notas de Oficina</a></li>
+    <li><span class="n">19</span><a href="#cajamenuda">Caja Menuda</a></li>
+    <li><span class="n">20</span><a href="#reportes">Reportes</a></li>
+    <li><span class="n">21</span><a href="#ia">Inteligencia Artificial</a></li>
+    <li><span class="n">22</span><a href="#configuracion">Configuración del Sistema</a></li>
+    <li><span class="n">23</span><a href="#usuarios">Gestión de Usuarios</a></li>
+    <li><span class="n">24</span><a href="#correos">Configuración de Correos</a></li>
+    <li><span class="n">25</span><a href="#mensajeria">Mensajería WhatsApp</a></li>
+    <li><span class="n">26</span><a href="#secretaria">Espacio de Trabajo de la Secretaria</a></li>
+    <li><span class="n">27</span><a href="#supervisor">Espacio de Trabajo del Supervisor</a></li>
+    <li><span class="n">28</span><a href="#contador">Espacio de Trabajo del Contador</a></li>
+    <li><span class="n">29</span><a href="#solucion">Solución de Problemas</a></li>
+    <li><span class="n">30</span><a href="#instalacion">Instalación en Dispositivos y Publicación en Internet</a></li>
+  </ol>
+</div>
+
+<!-- ============ 1. INTRODUCCIÓN ============ -->
+<div class="section">
+  <h1 id="intro">1. Introducción al Sistema</h1>
+  <p><strong>Caliza Los Osos</strong> es un sistema integral de gestión diseñado para controlar las operaciones de una cantera de caliza y su planta de producción en Panamá. Permite administrar el parque vehicular, los conductores, los viajes de transporte, las proformas de carga, los despachos de producción, el inventario de materiales y de oficina, la facturación, la contabilidad, la nómina, las notas internas, la caja menuda y los reportes operativos y financieros.</p>
+  <p>El sistema funciona mediante un navegador web moderno (Chrome, Edge, Firefox o Safari). No requiere instalación: basta con abrir la dirección del sistema y acceder con sus credenciales.</p>
+
+  <h2>1.1 Características principales</h2>
+  <ul>
+    <li><strong>Flota en tiempo real:</strong> mapa en vivo con la ubicación de camiones en viaje y unidades en la cantera.</li>
+    <li><strong>Control de materiales:</strong> inventario de caliza, arena, grava y artículos de oficina con alertas de stock.</li>
+    <li><strong>Documentos:</strong> facturas con ITBMS, notas de oficina exportables a Word, proformas y despachos.</li>
+    <li><strong>Finanzas:</strong> cuentas por cobrar y por pagar, caja menuda, nómina y pagos extra.</li>
+    <li><strong>Reportes e IA:</strong> reportes operativos/financieros exportables a PDF y Excel, predicción de mantenimiento y optimización de rutas.</li>
+  </ul>
+
+  <h2>1.2 Módulos disponibles</h2>
+  <p>El menú lateral muestra únicamente los módulos que el rol del usuario tiene autorizados. La lista completa de módulos es la siguiente:</p>
+  <table>
+    <tr><th>Módulo</th><th>Descripción</th></tr>
+    <tr><td>Dashboard</td><td>Panel de control con indicadores en tiempo real.</td></tr>
+    <tr><td>Camiones</td><td>Administración del parque vehicular y mantenimiento.</td></tr>
+    <tr><td>Conductores</td><td>Administración de camioneros y sus licencias.</td></tr>
+    <tr><td>Viajes</td><td>Registro y seguimiento de viajes de transporte.</td></tr>
+    <tr><td>Proformas de Carga</td><td>Documento de carga de la cantera hacia la planta y destinos.</td></tr>
+    <tr><td>Controles Cantera/Planta</td><td>Entrada, salida y pesaje en toneladas en cada punto.</td></tr>
+    <tr><td>Despachos de Producción</td><td>Mercancía que sale de la planta con plan vs. real.</td></tr>
+    <tr><td>Mapa en Vivo</td><td>Centro de control de la flota sobre el mapa.</td></tr>
+    <tr><td>Clientes</td><td>Directorio de clientes y condiciones de pago.</td></tr>
+    <tr><td>Proveedores</td><td>Directorio de proveedores por tipo de material.</td></tr>
+    <tr><td>Inventario</td><td>Materiales de construcción y anexo de oficina.</td></tr>
+    <tr><td>Facturación</td><td>Facturas de venta y compra con ITBMS.</td></tr>
+    <tr><td>Contabilidad</td><td>Cuentas por cobrar y por pagar.</td></tr>
+    <tr><td>Nómina</td><td>Nóminas de conductores y pagos extra.</td></tr>
+    <tr><td>Notas de Oficina</td><td>Memorandos, minutas, oficios y comunicados.</td></tr>
+    <tr><td>Caja Menuda</td><td>Control del fondo menor (entradas y salidas).</td></tr>
+    <tr><td>Mensajería WhatsApp</td><td>Centro de mensajería de la secretaria con envío real por la API de Meta.</td></tr>
+    <tr><td>Espacio de Trabajo (Secretaria)</td><td>Dashboard propio con agenda, recepción, archivo y logística.</td></tr>
+    <tr><td>Espacio de Trabajo (Supervisor)</td><td>Dashboard propio con producción, calidad, seguridad y equipo.</td></tr>
+    <tr><td>Espacio de Trabajo (Contador)</td><td>Dashboard propio con costos de producción, activos, presupuestos y cumplimiento.</td></tr>
+    <tr><td>Reportes</td><td>Catálogo de reportes operativos y financieros.</td></tr>
+    <tr><td>Configuración</td><td>Datos de la empresa y parámetros fiscales.</td></tr>
+    <tr><td>Usuarios</td><td>Gestión de usuarios y roles del sistema.</td></tr>
+    <tr><td>Config. Correos</td><td>Destinatarios de reportes automáticos por correo.</td></tr>
+  </table>
+</div>
+
+<!-- ============ 2. ACCESO ============ -->
+<div class="section pagebreak">
+  <h1 id="acceso">2. Acceso al Sistema</h1>
+
+  <h2>2.1 Iniciar sesión</h2>
+  <ol>
+    <li class="step">Abra su navegador e ingrese la dirección del sistema.</li>
+    <li class="step">Escriba su <strong>correo electrónico</strong> en el campo correspondiente.</li>
+    <li class="step">Escriba su <strong>contraseña</strong>.</li>
+    <li class="step">Presione el botón <span class="kbd">Iniciar Sesión</span>.</li>
+  </ol>
+  <p>El botón de ojo (<span class="kbd">👁</span>) a la derecha del campo de contraseña permite mostrar u ocultar la contraseña mientras la escribe.</p>
+
+  <div class="warn"><strong>Importante:</strong> si los datos son incorrectos, el sistema mostrará un mensaje de error. Si olvidó su contraseña, contacte al administrador del sistema para restablecerla.</div>
+
+  <h2>2.2 Usuarios de demostración</h2>
+  <p>Para probar el sistema se pueden utilizar los siguientes usuarios. <strong>Todos usan la contraseña <span class="cred">password123</span></strong>:</p>
+  <table>
+    <tr><th>Rol</th><th>Nombre</th><th>Correo electrónico</th></tr>
+    <tr><td>Super Administrador</td><td>Super Administrador</td><td>superadmin@calizalosos.com</td></tr>
+    <tr><td>Administrador</td><td>Administrador</td><td>admin@calizalosos.com</td></tr>
+    <tr><td>Despacho</td><td>Despacho Central</td><td>despacho@calizalosos.com</td></tr>
+    <tr><td>Contabilidad</td><td>Contabilidad</td><td>contabilidad@calizalosos.com</td></tr>
+    <tr><td>Supervisor</td><td>Supervisor de Planta</td><td>supervisor@calizalosos.com</td></tr>
+    <tr><td>Secretaria</td><td>Secretaria de Oficina</td><td>secretaria@calizalosos.com</td></tr>
+    <tr><td>Camionero</td><td>Carlos Mendoza</td><td>conductor@calizalosos.com</td></tr>
+    <tr><td>Camionero</td><td>Jorge Ramírez</td><td>jorge.ramirez@calizalosos.com</td></tr>
+  </table>
+
+  <h2>2.3 Cerrar sesión</h2>
+  <p>En el menú lateral, en la parte inferior donde aparece su nombre y rol, presione el botón de salida <span class="kbd">↪</span> para cerrar la sesión de forma segura.</p>
+
+  <h2>2.4 Cambio de tema (claro / oscuro)</h2>
+  <p>En la barra superior, el botón con el ícono de sol o luna alterna entre el tema claro y el tema oscuro. La preferencia se guarda automáticamente.</p>
+</div>
+
+<!-- ============ 3. ROLES ============ -->
+<div class="section">
+  <h1 id="roles">3. Roles y Usuarios</h1>
+  <p>El sistema cuenta con <strong>siete roles</strong>, cada uno con acceso a un conjunto de pantallas. Un rol determina qué módulos ve cada usuario en el menú.</p>
+
+  <table>
+    <tr><th>Rol</th><th>Descripción</th><th>Módulos típicos</th></tr>
+    <tr><td>super_admin</td><td>Super Administrador. Acceso total, incluida la gestión de usuarios y roles.</td><td>Todos</td></tr>
+    <tr><td>admin</td><td>Administrador. Acceso amplio a operaciones y configuración.</td><td>Operativos + financieros</td></tr>
+    <tr><td>dispatcher</td><td>Despacho. Gestiona proformas, controles, despachos y viajes.</td><td>Viajes, Proformas, Controles, Despachos, Mapa</td></tr>
+    <tr><td>driver</td><td>Camionero. Ve sus viajes y su actividad.</td><td>Dashboard, Viajes</td></tr>
+    <tr><td>accountant</td><td>Contabilidad de costos. Costos de producción, activos, presupuestos y cumplimiento.</td><td>Dashboard (Espacio de Trabajo), Facturación, Contabilidad, Nómina, Caja Menuda</td></tr>
+    <tr><td>supervisor</td><td>Supervisor de planta. Control de producción, calidad, seguridad y equipo.</td><td>Dashboard (Espacio de Trabajo), Controles Cantera/Planta</td></tr>
+    <tr><td>secretary</td><td>Secretaria. Agenda, recepción, correspondencia, archivo y apoyo de oficina.</td><td>Dashboard (Espacio de Trabajo), Notas de Oficina, Mensajería WhatsApp</td></tr>
+  </table>
+
+  <div class="note"><strong>Nota:</strong> solo el Super Administrador puede crear o asignar los roles <em>super_admin</em> y <em>admin</em>. Los demás roles solo pueden asignar roles operativos (despacho, camionero, contador, supervisor, secretaria).</div>
+</div>
+
+<!-- ============ 4. DASHBOARD ============ -->
+<div class="section">
+  <h1 id="dashboard">4. Dashboard en Vivo</h1>
+  <p>El Dashboard es la primera pantalla al iniciar sesión. Se actualiza automáticamente cada 15 segundos y muestra un resumen de la operación del día.</p>
+
+  <h2>4.1 Indicadores principales</h2>
+  <ul>
+    <li><strong>Viajes hoy:</strong> cantidad de viajes registrados en el día.</li>
+    <li><strong>Toneladas:</strong> total de toneladas transportadas.</li>
+    <li><strong>Ingresos ($):</strong> ingresos estimados del día.</li>
+    <li><strong>Gastos ($):</strong> gastos operativos del día.</li>
+  </ul>
+
+  <h2>4.2 Recursos activos</h2>
+  <p>Muestra los camiones activos, los conductores activos y los viajes en curso en ese momento.</p>
+
+  <h2>4.3 Alertas</h2>
+  <p>El sistema muestra alertas automáticas cuando existen:</p>
+  <ul>
+    <li>Stock bajo o crítico en el inventario.</li>
+    <li>Cuentas por cobrar pendientes.</li>
+    <li>Facturas vencidas.</li>
+  </ul>
+
+  <h2>4.4 Resumen del día</h2>
+  <p>Presenta Ingresos, Gastos y Ganancia del día en una tarjeta comparativa.</p>
+
+  <h2>4.5 Llegadas de caliza (hoy)</h2>
+  <p>Tabla con los camiones que llegaron cargados a la planta: camión, camionero, carga en toneladas, fecha, hora y cliente. También se muestra el contador de sacos salidos (si el rol tiene acceso a proformas).</p>
+
+  <h2>4.6 Viajes del día por camionero</h2>
+  <p>Al presionar el botón <span class="kbd">Viajes del día</span> de un camionero se abre un modal con sus cargas del día, el total en toneladas y la lista de viajes con su estado.</p>
+
+  <h2>4.7 Estados de los viajes</h2>
+  <table>
+    <tr><th>Estado</th><th>Significado</th></tr>
+    <tr><td>Programado (scheduled)</td><td>El viaje está agendado y aún no inicia.</td></tr>
+    <tr><td>En ruta (in_transit)</td><td>El camión se encuentra en camino.</td></tr>
+    <tr><td>Entregado (delivered)</td><td>La carga fue entregada en el destino.</td></tr>
+    <tr><td>Regresado (returned)</td><td>El camión regresó a la cantera.</td></tr>
+    <tr><td>Cancelado (cancelled)</td><td>El viaje fue cancelado.</td></tr>
+  </table>
+</div>
+
+<!-- ============ 5. CAMIONES ============ -->
+<div class="section pagebreak">
+  <h1 id="camiones">5. Camiones</h1>
+  <p>El módulo <strong>Camiones</strong> administra el parque vehicular de la empresa.</p>
+
+  <h2>5.1 Registrar un camión</h2>
+  <ol>
+    <li class="step">Presione el botón <span class="kbd">Agregar Camión</span>.</li>
+    <li class="step">Complete los campos obligatorios (marcados con *):</li>
+  </ol>
+  <table>
+    <tr><th>Campo</th><th>Descripción</th></tr>
+    <tr><td>Placa *</td><td>Placa del camión.</td></tr>
+    <tr><td>Marca *</td><td>Fabricante (p. ej. Kenworth, Freightliner).</td></tr>
+    <tr><td>Modelo *</td><td>Modelo del vehículo.</td></tr>
+    <tr><td>Año *</td><td>Año de fabricación.</td></tr>
+    <tr><td>Color</td><td>Color del camión.</td></tr>
+    <tr><td>VIN</td><td>Número de identificación vehicular.</td></tr>
+    <tr><td>Tipo de motor</td><td>Motor del camión.</td></tr>
+    <tr><td>Capacidad (ton) *</td><td>Capacidad máxima de carga en toneladas.</td></tr>
+    <tr><td>Kilometraje actual</td><td>Kilómetros recorridos.</td></tr>
+    <tr><td>Estado</td><td>Activo / Mantenimiento / Inactivo.</td></tr>
+    <tr><td>Aseguradora</td><td>Aseguradora del vehículo.</td></tr>
+    <tr><td>Nº Póliza</td><td>Número de póliza de seguro.</td></tr>
+    <tr><td>Vigencia seguro</td><td>Fecha de vencimiento del seguro.</td></tr>
+    <tr><td>Vigencia tarjeta de circulación</td><td>Fecha de vencimiento de la tarjeta.</td></tr>
+  </table>
+  <p>Presione <span class="kbd">Guardar</span> para registrar el camión.</p>
+
+  <h2>5.2 Buscar y ver camiones</h2>
+  <p>Utilice el campo de búsqueda para filtrar por placa, marca o modelo. El botón de <strong>Ver detalles</strong> abre un modal con la información completa del camión, incluyendo su historial de mantenimientos, llantas y datos del seguro.</p>
+
+  <h2>5.3 Editar y eliminar</h2>
+  <p>Cada fila de la tabla tiene botones para <strong>Editar</strong> (lápiz) y <strong>Eliminar</strong> (papelera). Al eliminar, el sistema pide confirmación antes de borrar el registro.</p>
+
+  <div class="note"><strong>Sugerencia:</strong> use el estado "Mantenimiento" para los camiones que no pueden operar. Estos no aparecerán disponibles al crear nuevos viajes.</div>
+</div>
+
+<!-- ============ 6. CONDUCTORES ============ -->
+<div class="section">
+  <h1 id="conductores">6. Conductores</h1>
+  <p>El módulo <strong>Conductores</strong> administra los camioneros de la empresa.</p>
+
+  <h2>6.1 Registrar un conductor</h2>
+  <ol>
+    <li class="step">Presione <span class="kbd">Agregar Conductor</span>.</li>
+    <li class="step">Complete el formulario:</li>
+  </ol>
+  <table>
+    <tr><th>Campo</th><th>Descripción</th></tr>
+    <tr><td>Nombre completo *</td><td>Nombre del conductor.</td></tr>
+    <tr><td>Email *</td><td>Correo del conductor (se usa para crear su acceso al sistema).</td></tr>
+    <tr><td>Contraseña *</td><td>Contraseña inicial (solo en el alta; en edición no se muestra).</td></tr>
+    <tr><td>Teléfono</td><td>Teléfono de contacto.</td></tr>
+    <tr><td>No. Licencia *</td><td>Número de licencia de conducir.</td></tr>
+    <tr><td>Tipo de licencia *</td><td>A (Camión) / B (Autobús) / C (Carga).</td></tr>
+    <tr><td>Vigencia licencia *</td><td>Fecha de vencimiento de la licencia.</td></tr>
+    <tr><td>CURP / RFC</td><td>Claves fiscales del conductor (según el país).</td></tr>
+    <tr><td>Fecha de ingreso *</td><td>Fecha en que ingresó a la empresa.</td></tr>
+    <tr><td>Dirección</td><td>Dirección de residencia.</td></tr>
+  </table>
+  <p>Presione <span class="kbd">Guardar</span>.</p>
+
+  <h2>6.2 Operaciones</h2>
+  <ul>
+    <li><strong>Buscar:</strong> filtra por nombre, licencia o teléfono.</li>
+    <li><strong>Editar:</strong> actualiza los datos del conductor.</li>
+    <li><strong>Eliminar:</strong> borra el registro con confirmación.</li>
+    <li><strong>Ver detalles:</strong> consulta sus viajes, horas trabajadas y camión asignado.</li>
+  </ul>
+</div>
+
+<!-- ============ 7. VIAJES ============ -->
+<div class="section pagebreak">
+  <h1 id="viajes">7. Viajes</h1>
+  <p>El módulo <strong>Viajes</strong> registra y controla los viajes de transporte de material desde la cantera hasta los clientes o la planta.</p>
+
+  <h2>7.1 Crear un viaje</h2>
+  <ol>
+    <li class="step">Presione <span class="kbd">Nuevo Viaje</span>.</li>
+    <li class="step">Complete el formulario:</li>
+  </ol>
+  <table>
+    <tr><th>Campo</th><th>Descripción</th></tr>
+    <tr><td>Conductor *</td><td>Conductor asignado al viaje.</td></tr>
+    <tr><td>Caminión *</td><td>Solo se muestran los camiones en estado Activo.</td></tr>
+    <tr><td>Cliente *</td><td>Cliente que recibe el material.</td></tr>
+    <tr><td>Tipo de material *</td><td>Caliza / Arena / Grava / Otros.</td></tr>
+    <tr><td>Fecha * y Hora *</td><td>Fecha y hora programadas del viaje.</td></tr>
+    <tr><td>Origen y Destino</td><td>Nombre y dirección de cada punto.</td></tr>
+    <tr><td>Peso (ton) *</td><td>Toneladas de la carga.</td></tr>
+    <tr><td>Precio por tonelada *</td><td>Tarifa por tonelada; el sistema calcula el <strong>Total Estimado</strong> automáticamente.</td></tr>
+    <tr><td>Estado</td><td>Editable al editar el viaje.</td></tr>
+  </table>
+
+  <h2>7.2 Cambiar el estado del viaje</h2>
+  <p>El sistema permite avanzar el estado de un viaje según el avance de la operación:</p>
+  <ul>
+    <li><span class="kbd">Iniciar</span> → el viaje pasa a <em>En ruta</em>.</li>
+    <li><span class="kbd">Entregar</span> → pasa a <em>Entregado</em>.</li>
+    <li><span class="kbd">Regresar</span> → pasa a <em>Regresado</em>.</li>
+    <li><span class="kbd">Cancelar</span> → pasa a <em>Cancelado</em>.</li>
+  </ul>
+  <p>Adicionalmente, el sistema soporta el registro de pesaje en báscula (peso bruto/tara), evidencia fotográfica y calidad del material en el backend.</p>
+
+  <h2>7.3 Búsqueda y filtros</h2>
+  <p>Puede buscar por origen, destino o material, y filtrar por estado del viaje para ver solo los que le interesan.</p>
+
+  <div class="note"><strong>Formato de fecha:</strong> la fecha de los viajes se muestra como día/mes/año con hora (DD/MM/AAAA HH:MM).</div>
+</div>
+
+<!-- ============ 8. PROFORMAS ============ -->
+<div class="section">
+  <h1 id="proformas">8. Proformas de Carga</h1>
+  <p>La <strong>Proforma de Carga</strong> documenta la salida de material desde la cantera hacia la planta de producción y los puntos de Panamá.</p>
+
+  <h2>8.1 Crear una proforma</h2>
+  <ol>
+    <li class="step">Presione <span class="kbd">Nueva Proforma</span>.</li>
+    <li class="step">Complete el formulario:</li>
+  </ol>
+  <table>
+    <tr><th>Campo</th><th>Descripción</th></tr>
+    <tr><td>Fecha *</td><td>Fecha de la carga.</td></tr>
+    <tr><td>Camión *</td><td>Vehículo que transporta la carga.</td></tr>
+    <tr><td>Camionero *</td><td>Conductor del camión.</td></tr>
+    <tr><td>Cantera (origen)</td><td>Cantera de donde sale el material.</td></tr>
+    <tr><td>Destino *</td><td>Selector geográfico: Provincia → Distrito → Corregimiento.</td></tr>
+    <tr><td>Punto/Cliente</td><td>Cliente vinculado (opcional).</td></tr>
+    <tr><td>Material *</td><td>Tipo de material (por defecto Caliza).</td></tr>
+    <tr><td>Toneladas cargadas *</td><td>Peso de la carga en toneladas.</td></tr>
+    <tr><td>Peso bruto / tara (kg)</td><td>Pesajes de la báscula (opcional).</td></tr>
+    <tr><td>Estado</td><td>Creada / Cargada / En tránsito / Entregada.</td></tr>
+  </table>
+
+  <h2>8.2 Indicadores y tabla</h2>
+  <ul>
+    <li><strong>Tarjetas de resumen:</strong> Cargas del día, Toneladas cargadas y Sacos salidos.</li>
+    <li><strong>Carga por destino:</strong> desglose de cargas y toneladas por destino (Puntos de Panamá).</li>
+    <li><strong>Tabla de proformas:</strong> número de proforma, camión, camionero, origen, destino, toneladas y estado.</li>
+  </ul>
+
+  <div class="warn"><strong>Recordatorio:</strong> al abrir el modal "Nueva Proforma" los botones <span class="kbd">Cancelar</span> y <span class="kbd">Guardar</span> siempre permanecen visibles al pie del formulario.</div>
+</div>
+
+<!-- ============ 9. CONTROLES ============ -->
+<div class="section pagebreak">
+  <h1 id="controles">9. Controles Cantera / Planta</h1>
+  <p>El módulo <strong>Controles</strong> registra la entrada y salida de los camiones en cada punto (cantera o planta de producción), junto con el pesaje en <strong>toneladas</strong> y la persona responsable.</p>
+
+  <h2>9.1 Registrar un control</h2>
+  <ol>
+    <li class="step">Seleccione la <strong>fecha</strong> del control.</li>
+    <li class="step">Presione <span class="kbd">Nuevo Control</span>.</li>
+    <li class="step">Complete el formulario:</li>
+  </ol>
+  <table>
+    <tr><th>Campo</th><th>Descripción</th></tr>
+    <tr><td>Fecha y hora *</td><td>Momento del control.</td></tr>
+    <tr><td>Punto *</td><td>Cantera o Planta de Producción.</td></tr>
+    <tr><td>Tipo de control *</td><td>Entrada o Salida.</td></tr>
+    <tr><td>Camión *</td><td>Vehículo controlado.</td></tr>
+    <tr><td>Camionero *</td><td>Conductor del camión.</td></tr>
+    <tr><td>Peso (toneladas) *</td><td>Peso de la carga en toneladas.</td></tr>
+    <tr><td>Persona responsable *</td><td>Quién realiza el control.</td></tr>
+    <tr><td>Notas</td><td>Observaciones (opcional).</td></tr>
+  </table>
+
+  <h2>9.2 Visualización</h2>
+  <ul>
+    <li><strong>Tarjetas:</strong> Controles del día y Toneladas registradas.</li>
+    <li><strong>Controles por punto:</strong> desglose por ubicación (cantera/planta) y tipo, con controles y toneladas.</li>
+    <li><strong>Tabla de registros:</strong> número de control, hora, punto, tipo, camión, camionero, peso en ton y responsable.</li>
+  </ul>
+
+  <div class="note"><strong>Nota:</strong> el control utiliza toneladas como unidad de medida, ya que el material sale de la cantera hacia la planta de producción.</div>
+</div>
+
+<!-- ============ 10. DESPACHOS ============ -->
+<div class="section">
+  <h1 id="despachos">10. Despachos de Producción</h1>
+  <p>El módulo <strong>Despachos</strong> registra la mercancía que sale de la planta, comparando lo planificado con lo realmente despachado.</p>
+
+  <h2>10.1 Crear un despacho</h2>
+  <ol>
+    <li class="step">Seleccione la <strong>fecha</strong> en el selector (vista diaria).</li>
+    <li class="step">Presione <span class="kbd">Nuevo Despacho</span>.</li>
+    <li class="step">Complete el formulario:</li>
+  </ol>
+  <table>
+    <tr><th>Campo</th><th>Descripción</th></tr>
+    <tr><td>Fecha *</td><td>Fecha del despacho.</td></tr>
+    <tr><td>Transporte (camión) *</td><td>Camión que despacha.</td></tr>
+    <tr><td>Camionero *</td><td>Conductor asignado.</td></tr>
+    <tr><td>Destino *</td><td>Selector geográfico de Panamá.</td></tr>
+    <tr><td>Punto/Cliente</td><td>Cliente vinculado (opcional).</td></tr>
+    <tr><td>Material *</td><td>Tipo de material (por defecto Caliza).</td></tr>
+    <tr><td>Toneladas planificadas *</td><td>Cantidad programada.</td></tr>
+    <tr><td>Toneladas reales *</td><td>Cantidad realmente despachada.</td></tr>
+    <tr><td>Fecha/hora salida * y entrega</td><td>Horarios del despacho.</td></tr>
+    <tr><td>Estado</td><td>Programado / En tránsito / Entregado / Cancelado.</td></tr>
+    <tr><td>Persona responsable *</td><td>Responsable del despacho.</td></tr>
+  </table>
+
+  <h2>10.2 Indicadores y rendimiento</h2>
+  <ul>
+    <li><strong>Despachos del día</strong> y <strong>Toneladas</strong> (plan → real).</li>
+    <li><strong>Rendimiento %:</strong> se calcula comparando lo real contra lo planificado.</li>
+    <li><strong>Rendimiento por destino:</strong> panel con el desempeño de cada punto de entrega.</li>
+  </ul>
+  <p>El rendimiento se pinta con colores: ≥95% verde, ≥80% ámbar y menor en rojo.</p>
+</div>
+
+<!-- ============ 11. MAPA ============ -->
+<div class="section pagebreak">
+  <h1 id="mapa">11. Mapa en Vivo</h1>
+  <p>El <strong>Centro de Control · Flota en Vivo</strong> muestra en un mapa (Leaflet / OpenStreetMap) la posición de la flota en tiempo real. Se actualiza cada 5 segundos y el seguimiento cada 10 segundos.</p>
+
+  <h2>11.1 Tipos de unidades</h2>
+  <table>
+    <tr><th>Tipo</th><th>Descripción</th><th>Marcador</th></tr>
+    <tr><td>Viaje</td><td>Unidades en viaje de producción hacia el destino.</td><td>Letra V, color púrpura.</td></tr>
+    <tr><td>Cantera</td><td>Unidades ubicadas en la cantera.</td><td>Letra C, color naranja.</td></tr>
+  </table>
+
+  <h2>11.2 Zonas y estado de señal</h2>
+  <ul>
+    <li><strong>Zonas:</strong> En Cantera / En Ruta / En Destino / Sin ubicación.</li>
+    <li><strong>Estado de señal:</strong> En línea (ubicación < 2 min), Degradada (< 10 min), Perdida (≥ 10 min).</li>
+  </ul>
+
+  <h2>11.3 Seguimiento de una unidad</h2>
+  <ol>
+    <li class="step">Seleccione una unidad en la lista lateral o haga clic en un marcador del mapa.</li>
+    <li class="step">Se abre un panel de seguimiento con:</li>
+  </ol>
+  <ul>
+    <li>Progreso del viaje en porcentaje.</li>
+    <li>Kilómetros recorridos y restantes.</li>
+    <li>Paradas realizadas y tiempo estacionado.</li>
+  </ul>
+  <p>También puede ajustar el radio de la <strong>geocerca</strong> (entre ±0.5 y 10 km) para definir el área de cada punto.</p>
+</div>
+
+<!-- ============ 12. CLIENTES ============ -->
+<div class="section">
+  <h1 id="clientes">12. Clientes</h1>
+  <p>El módulo <strong>Clientes</strong> administra el directorio de clientes (cementeras, constructoras, etc.).</p>
+
+  <h2>12.1 Registrar un cliente</h2>
+  <ol>
+    <li class="step">Presione <span class="kbd">Agregar Cliente</span>.</li>
+    <li class="step">Complete el formulario:</li>
+  </ol>
+  <table>
+    <tr><th>Campo</th><th>Descripción</th></tr>
+    <tr><td>Nombre/Razón Social *</td><td>Nombre del cliente.</td></tr>
+    <tr><td>Empresa</td><td>Empresa a la que pertenece.</td></tr>
+    <tr><td>RFC</td><td>Clave fiscal.</td></tr>
+    <tr><td>Email y Teléfono</td><td>Datos de contacto.</td></tr>
+    <tr><td>Contacto</td><td>Persona de contacto.</td></tr>
+    <tr><td>Condiciones de pago</td><td>Contado / 15 / 30 / 60 días.</td></tr>
+    <tr><td>Límite de crédito</td><td>Máximo de crédito autorizado.</td></tr>
+    <tr><td>Dirección</td><td>Calle, número, colonia, ciudad, estado.</td></tr>
+  </table>
+
+  <h2>12.2 Operaciones</h2>
+  <ul>
+    <li><strong>Buscar:</strong> por nombre, empresa o RFC.</li>
+    <li><strong>Editar / Eliminar:</strong> acciones por fila.</li>
+    <li><strong>Detalles:</strong> consulta de compras, viajes y facturas del cliente.</li>
+  </ul>
+</div>
+
+<!-- ============ 13. PROVEEDORES ============ -->
+<div class="section">
+  <h1 id="proveedores">13. Proveedores</h1>
+  <p>El módulo <strong>Proveedores</strong> administra a quienes suministran combustible, llantas, refacciones, caliza y otros insumos.</p>
+
+  <h2>13.1 Registrar un proveedor</h2>
+  <ol>
+    <li class="step">Presione <span class="kbd">Agregar Proveedor</span>.</li>
+    <li class="step">Complete el formulario:</li>
+  </ol>
+  <table>
+    <tr><th>Campo</th><th>Descripción</th></tr>
+    <tr><td>Nombre/Razón Social *</td><td>Nombre del proveedor.</td></tr>
+    <tr><td>Empresa, RFC, Email, Teléfono</td><td>Datos generales y de contacto.</td></tr>
+    <tr><td>Dirección</td><td>Dirección del proveedor.</td></tr>
+    <tr><td>Tipo de material</td><td>Combustible / Llantas / Refacciones / Caliza / Otro.</td></tr>
+    <tr><td>Condiciones de pago</td><td>Plazos de pago.</td></tr>
+    <tr><td>Notas</td><td>Observaciones.</td></tr>
+  </table>
+
+  <h2>13.2 Operaciones</h2>
+  <ul>
+    <li><strong>Buscar:</strong> por nombre, empresa o RFC.</li>
+    <li><strong>Editar / Eliminar:</strong> acciones por fila.</li>
+  </ul>
+</div>
+
+<!-- ============ 14. INVENTARIO ============ -->
+<div class="section pagebreak">
+  <h1 id="inventario">14. Inventario</h1>
+  <p>El módulo <strong>Inventario</strong> administra tanto los materiales de construcción (caliza, arena, grava) como los artículos de oficina, organizados en dos secciones.</p>
+
+  <h2>14.1 Secciones del inventario</h2>
+  <ul>
+    <li><strong>Inventario de Materiales:</strong> caliza, arena, grava y otros materiales de la operación (ubicación distinta a "Oficina").</li>
+    <li><strong>Inventario - Oficina:</strong> anexo con artículos de oficina (tintas, papel, lápices, bolígrafos, libretas de facturas, impresoras, sillas, mesas, etc.).</li>
+  </ul>
+
+  <h2>14.2 Agregar un artículo</h2>
+  <ol>
+    <li class="step">En la sección correspondiente presione <span class="kbd">Agregar Material</span> (materiales) o <span class="kbd">Agregar nuevo</span> (oficina).</li>
+    <li class="step">Complete el formulario:</li>
+  </ol>
+  <table>
+    <tr><th>Campo</th><th>Descripción</th></tr>
+    <tr><td>Nombre *</td><td>Nombre del artículo o material.</td></tr>
+    <tr><td>Tipo de Material</td><td>Solo en materiales de construcción (Caliza/Arena/Grava/Otros). En el anexo de oficina este campo no aparece: el tipo se asigna automáticamente.</td></tr>
+    <tr><td>Unidad *</td><td>Unidad de medida (ton para materiales; unidad, caja, resma... para oficina).</td></tr>
+    <tr><td>Ubicación *</td><td>Bodega, cantera, o "Oficina" para el anexo.</td></tr>
+    <tr><td>Stock actual / mínimo / máximo *</td><td>Niveles de inventario.</td></tr>
+    <tr><td>Costo por unidad *</td><td>Costo unitario del artículo.</td></tr>
+  </table>
+
+  <div class="note"><strong>Nota:</strong> al agregar un artículo desde el anexo de oficina, la ubicación queda predefinida en "Oficina" y el formulario no muestra el campo "Tipo de Material".</div>
+
+  <h2>14.3 Estado del stock</h2>
+  <table>
+    <tr><th>Estado</th><th>Criterio</th><th>Color</th></tr>
+    <tr><td>Normal</td><td>Stock por encima del mínimo.</td><td>Verde</td></tr>
+    <tr><td>Bajo</td><td>Stock igual o menor al mínimo.</td><td>Amarillo</td></tr>
+    <tr><td>Crítico</td><td>Stock menor o igual a la mitad del mínimo.</td><td>Rojo</td></tr>
+  </table>
+
+  <h2>14.4 Movimientos de entrada y salida</h2>
+  <p>Cada artículo tiene botones de <strong>Entrada</strong> (flecha verde) y <strong>Salida</strong> (flecha naranja) para registrar movimientos de stock. Al registrar una salida, el sistema valida que haya stock suficiente.</p>
+
+  <h2>14.5 Editar y eliminar</h2>
+  <p>Cada fila tiene botones de <strong>Editar</strong> (lápiz) y <strong>Eliminar</strong> (papelera) con confirmación. La búsqueda filtra por nombre, tipo o ubicación.</p>
+
+  <div class="note"><strong>Oficina:</strong> el anexo "Inventario - Oficina" cuenta con las acciones <strong>Agregar nuevo</strong>, <strong>Editar</strong>, <strong>Modificar</strong> (entradas/salidas) y <strong>Eliminar</strong>.</div>
+</div>
+
+<!-- ============ 15. FACTURACIÓN ============ -->
+<div class="section">
+  <h1 id="facturacion">15. Facturación</h1>
+  <p>El módulo <strong>Facturación</strong> genera facturas de venta y compra con cálculo automático de ITBMS.</p>
+
+  <h2>15.1 Crear una factura</h2>
+  <ol>
+    <li class="step">Presione <span class="kbd">Nueva Factura</span>.</li>
+    <li class="step">Complete el formulario:</li>
+  </ol>
+  <table>
+    <tr><th>Campo</th><th>Descripción</th></tr>
+    <tr><td>Tipo *</td><td>Venta o Compra.</td></tr>
+    <tr><td>Cliente * / Proveedor *</td><td>Según el tipo de factura.</td></tr>
+    <tr><td>Fecha de emisión *</td><td>Fecha de la factura.</td></tr>
+    <tr><td>Fecha de vencimiento *</td><td>Fecha límite de pago.</td></tr>
+    <tr><td>Conceptos</td><td>Ítems dinámicos: descripción, cantidad y precio.</td></tr>
+    <tr><td>Notas</td><td>Observaciones.</td></tr>
+  </table>
+  <p>El sistema calcula automáticamente el <strong>Subtotal</strong>, el <strong>ITBMS</strong> y el <strong>Total</strong> de la factura.</p>
+
+  <h2>15.2 Estados de la factura</h2>
+  <table>
+    <tr><th>Estado</th><th>Descripción</th></tr>
+    <tr><td>Borrador</td><td>Factura en preparación.</td></tr>
+    <tr><td>Enviada</td><td>Entregada al cliente/proveedor.</td></tr>
+    <tr><td>Pagada</td><td>Pagada por completo.</td></tr>
+    <tr><td>Vencida</td><td>No pagada en la fecha de vencimiento.</td></tr>
+    <tr><td>Cancelada</td><td>Anulada.</td></tr>
+  </table>
+
+  <h2>15.3 Operaciones</h2>
+  <ul>
+    <li><strong>Buscar</strong> por número, cliente o proveedor.</li>
+    <li><strong>Filtrar</strong> por tipo (Venta/Compra) y estado.</li>
+    <li><strong>Cambiar estado:</strong> marcar como enviada, pagada o vencida, o cancelar.</li>
+    <li><strong>Editar / Eliminar:</strong> acciones por fila.</li>
+  </ul>
+</div>
+
+<!-- ============ 16. CONTABILIDAD ============ -->
+<div class="section pagebreak">
+  <h1 id="contabilidad">16. Contabilidad</h1>
+  <p>El módulo <strong>Contabilidad</strong> organiza las cuentas por cobrar y por pagar de la empresa.</p>
+
+  <h2>16.1 Pestañas</h2>
+  <ul>
+    <li><strong>Cuentas por Cobrar:</strong> dinero que los clientes deben a la empresa.</li>
+    <li><strong>Cuentas por Pagar:</strong> dinero que la empresa debe a proveedores.</li>
+  </ul>
+
+  <h2>16.2 Indicadores y operaciones</h2>
+  <ul>
+    <li><strong>Tarjetas resumen:</strong> Pendiente, Pagado y Vencido.</li>
+    <li><strong>Tabla de cuentas:</strong> cada registro tiene un botón de <span class="kbd">Pagar</span> para registrar el pago de la cuenta.</li>
+  </ul>
+
+  <h2>16.3 Estados de cuenta</h2>
+  <table>
+    <tr><th>Estado</th><th>Descripción</th></tr>
+    <tr><td>Pendiente (pending)</td><td>Aún no se ha pagado.</td></tr>
+    <tr><td>Parcial (partial)</td><td>Pagada parcialmente.</td></tr>
+    <tr><td>Pagado (paid)</td><td>Pagada por completo.</td></tr>
+    <tr><td>Vencido (overdue)</td><td>Pasado su vencimiento.</td></tr>
+  </table>
+</div>
+
+<!-- ============ 17. NÓMINA ============ -->
+<div class="section">
+  <h1 id="nomina">17. Nómina y Pagos Extra</h1>
+  <p>El módulo <strong>Nómina</strong> calcula los salarios de los conductores e incluye la gestión de pagos extra.</p>
+
+  <h2>17.1 Crear una nómina</h2>
+  <ol>
+    <li class="step">Presione <span class="kbd">Nueva Nómina</span>.</li>
+    <li class="step">Complete el formulario:</li>
+  </ol>
+  <table>
+    <tr><th>Campo</th><th>Descripción</th></tr>
+    <tr><td>Empleado (conductor) *</td><td>Trabajador que recibe el pago.</td></tr>
+    <tr><td>Periodo *</td><td>Identificador del período de pago.</td></tr>
+    <tr><td>Fecha inicio * y Fecha fin *</td><td>Rango del período.</td></tr>
+    <tr><td>Salario base *</td><td>Salario del período.</td></tr>
+    <tr><td>Horas extra y Tarifa hora extra</td><td>Horas adicionales y su tarifa (por defecto 50).</td></tr>
+    <tr><td>Bonificaciones / Deducciones</td><td>Ajustes al salario.</td></tr>
+  </table>
+  <p>El sistema calcula automáticamente el monto de horas extra, los impuestos y el <strong>Neto</strong> a pagar.</p>
+
+  <h2>17.2 Pagos extra</h2>
+  <ol>
+    <li class="step">Vaya a la pestaña <strong>Pagos Extra</strong>.</li>
+    <li class="step">Presione <span class="kbd">Nuevo Pago Extra</span> y complete: Conductor *, Concepto *, Monto *, Fecha de pago * y Estado (Pagado/Pendiente).</li>
+  </ol>
+
+  <h2>17.3 Indicadores</h2>
+  <ul>
+    <li>Total de nómina y promedio por empleado.</li>
+    <li>Pagos pendientes (estado aprobado).</li>
+    <li>Total de pagos extra y resumen por conductor.</li>
+  </ul>
+</div>
+
+<!-- ============ 18. NOTAS ============ -->
+<div class="section pagebreak">
+  <h1 id="notas">18. Notas de Oficina</h1>
+  <p>El módulo <strong>Notas de Oficina</strong> crea documentos internos como memorandos, minutas, oficios y comunicados, y permite exportarlos a Word.</p>
+
+  <h2>18.1 Crear una nota</h2>
+  <ol>
+    <li class="step">Presione <span class="kbd">Nueva Nota</span>.</li>
+    <li class="step">Complete el formulario:</li>
+  </ol>
+  <table>
+    <tr><th>Campo</th><th>Descripción</th></tr>
+    <tr><td>Título *</td><td>Título de la nota.</td></tr>
+    <tr><td>Fecha *</td><td>Fecha del documento.</td></tr>
+    <tr><td>Tipo de nota *</td><td>General / Memorando / Minuta / Oficio / Comunicado / Otro.</td></tr>
+    <tr><td>Estado *</td><td>Final o Borrador.</td></tr>
+    <tr><td>Referente a</td><td>Asunto relacionado (opcional).</td></tr>
+    <tr><td>Contenido *</td><td>Cuerpo del documento.</td></tr>
+  </table>
+
+  <h2>18.2 Exportar a Word</h2>
+  <p>Cada nota tiene un botón <span class="kbd">Word</span> que genera un documento <strong>.docx</strong> descargable con el membrete de Caliza Los Osos, número, fecha, autor, estado, referente y el contenido de la nota.</p>
+
+  <h2>18.3 Indicadores y filtros</h2>
+  <ul>
+    <li>Tarjetas: Notas registradas, Notas finales y Borradores.</li>
+    <li>Filtros por tipo y estado, y búsqueda por texto.</li>
+  </ul>
+</div>
+
+<!-- ============ 19. CAJA MENUDA ============ -->
+<div class="section">
+  <h1 id="cajamenuda">19. Caja Menuda</h1>
+  <p>El módulo <strong>Caja Menuda</strong> controla el fondo menor de la oficina, registrando entradas y salidas de dinero.</p>
+
+  <h2>19.1 Registrar un movimiento</h2>
+  <ol>
+    <li class="step">Presione <span class="kbd">Registrar Movimiento</span>.</li>
+    <li class="step">Complete el formulario:</li>
+  </ol>
+  <table>
+    <tr><th>Campo</th><th>Descripción</th></tr>
+    <tr><td>Fecha *</td><td>Fecha del movimiento.</td></tr>
+    <tr><td>Tipo *</td><td>Salida o Entrada.</td></tr>
+    <tr><td>Concepto *</td><td>Motivo del movimiento.</td></tr>
+    <tr><td>Monto ($) *</td><td>Cantidad de dinero.</td></tr>
+    <tr><td>Categoría</td><td>Fondo inicial, viáticos, combustible, útiles de oficina, mantenimiento, compras menores, otros.</td></tr>
+    <tr><td>Persona responsable</td><td>Quién gestiona el movimiento.</td></tr>
+    <tr><td>Referencia</td><td>Número de recibo o factura.</td></tr>
+    <tr><td>Notas</td><td>Observaciones.</td></tr>
+  </table>
+
+  <h2>19.2 Indicadores y filtros</h2>
+  <ul>
+    <li>Tarjetas: Saldo actual, Entradas y Salidas.</li>
+    <li>Filtros por tipo, categoría y rango de fechas.</li>
+  </ul>
+</div>
+
+<!-- ============ 20. REPORTES ============ -->
+<div class="section pagebreak">
+  <h1 id="reportes">20. Reportes</h1>
+  <p>El módulo <strong>Reportes</strong> agrupa los reportes operativos y financieros. Cada reporte puede exportarse a <strong>PDF</strong> y <strong>Excel</strong> y cuenta con filtros de rango de fechas y tarjetas de estadísticas.</p>
+
+  <h2>20.1 Catálogo de reportes</h2>
+  <table>
+    <tr><th>Reporte</th><th>Descripción</th></tr>
+    <tr><td>Toneladas por Cliente</td><td>Toneladas transportadas por cada cliente.</td></tr>
+    <tr><td>Rentabilidad por Viaje</td><td>Utilidad de cada viaje.</td></tr>
+    <tr><td>Consumo de Combustible</td><td>Consumo y costo del combustible.</td></tr>
+    <tr><td>Costos de Operación</td><td>Desglose de costos por categoría.</td></tr>
+    <tr><td>Resumen Financiero</td><td>Ingresos, gastos y resultados.</td></tr>
+    <tr><td>Rendimiento de Camiones</td><td>Desempeño del parque vehicular.</td></tr>
+    <tr><td>Rendimiento de Conductores</td><td>Desempeño de los camioneros.</td></tr>
+    <tr><td>Reporte por Material</td><td>Movimientos por tipo de material.</td></tr>
+    <tr><td>Reporte de Inventario</td><td>Existencias y valor del inventario.</td></tr>
+    <tr><td>Predicción de Mantenimiento (IA)</td><td>Pronóstico de mantenimiento por camión.</td></tr>
+    <tr><td>Optimizador de Rutas (IA)</td><td>Recomendación de rutas eficientes.</td></tr>
+  </table>
+
+  <h2>20.2 Cómo usar un reporte</h2>
+  <ol>
+    <li class="step">Desde el catálogo, haga clic en la tarjeta del reporte deseado.</li>
+    <li class="step">Ajuste el rango de fechas con los filtros disponibles.</li>
+    <li class="step">Revise las tarjetas de estadísticas y los gráficos.</li>
+    <li class="step">Presione <span class="kbd">PDF</span> o <span class="kbd">Excel</span> para exportar.</li>
+  </ol>
+</div>
+
+<!-- ============ 21. IA ============ -->
+<div class="section">
+  <h1 id="ia">21. Inteligencia Artificial</h1>
+  <p>El sistema incluye dos funcionalidades basadas en IA (configurables desde Configuración):</p>
+
+  <h2>21.1 Predicción de Mantenimiento</h2>
+  <p>Analiza el historial de cada camión (kilometraje, mantenimientos, uso) y predice cuándo conviene realizar el próximo mantenimiento, ayudando a prevenir fallas.</p>
+
+  <h2>21.2 Optimización de Rutas</h2>
+  <p>Dado un origen, destino, tipo de material, peso y hora de salida, recomienda la ruta más eficiente para el viaje.</p>
+
+  <div class="note"><strong>Nota:</strong> estas funciones se activan o desactivan en el módulo Configuración.</div>
+</div>
+
+<!-- ============ 22. CONFIGURACIÓN ============ -->
+<div class="section pagebreak">
+  <h1 id="configuracion">22. Configuración del Sistema</h1>
+  <p>El módulo <strong>Configuración</strong> guarda los datos de la empresa y los parámetros fiscales y operativos.</p>
+
+  <h2>22.1 Datos de la empresa</h2>
+  <table>
+    <tr><th>Campo</th><th>Valor actual de ejemplo</th></tr>
+    <tr><td>Nombre de la empresa *</td><td>Caliza Los Osos</td></tr>
+    <tr><td>RFC</td><td>1556778-1-2015</td></tr>
+    <tr><td>Teléfono</td><td>+(507) 900-0000</td></tr>
+    <tr><td>Email</td><td>hola@calizalosos.com</td></tr>
+    <tr><td>Dirección</td><td>Corregimiento El Coco, Distrito de Penonomé, Coclé, Panamá</td></tr>
+  </table>
+
+  <h2>22.2 Configuración fiscal</h2>
+  <ul>
+    <li><strong>Tasa de IVA/ITBMS (%):</strong> impuesto aplicado a facturas y cálculos (por ejemplo 7%).</li>
+    <li><strong>Precio del combustible ($/litro):</strong> costo de referencia del combustible.</li>
+  </ul>
+  <p>Presione <span class="kbd">Guardar Configuración</span> para aplicar los cambios.</p>
+</div>
+
+<!-- ============ 23. USUARIOS ============ -->
+<div class="section">
+  <h1 id="usuarios">23. Gestión de Usuarios</h1>
+  <p>El módulo <strong>Usuarios</strong> administra los accesos al sistema.</p>
+
+  <h2>23.1 Registrar un usuario</h2>
+  <ol>
+    <li class="step">Presione <span class="kbd">Registrar Usuario</span>.</li>
+    <li class="step">Complete: Nombre completo *, Correo electrónico *, Contraseña * (mínimo 6 caracteres), Rol * y Teléfono.</li>
+    <li class="step">Presione <span class="kbd">Guardar</span>.</li>
+  </ol>
+
+  <h2>23.2 Cambiar rol y eliminar</h2>
+  <ul>
+    <li><strong>Cambiar rol:</strong> seleccione un nuevo rol desde el menú desplegable de cada usuario.</li>
+    <li><strong>Eliminar:</strong> borra el acceso del usuario.</li>
+  </ul>
+  <div class="warn"><strong>Importante:</strong> solo el Super Administrador puede crear o asignar los roles super_admin y admin. Los demás roles solo pueden asignar roles operativos.</div>
+</div>
+
+<!-- ============ 24. CORREOS ============ -->
+<div class="section">
+  <h1 id="correos">24. Configuración de Correos</h1>
+  <p>El módulo <strong>Config. Correos</strong> define los destinatarios de los reportes automáticos por correo.</p>
+
+  <h2>24.1 Reportes programados</h2>
+  <table>
+    <tr><th>Reporte</th><th>Horario</th></tr>
+    <tr><td>Reporte Diario</td><td>07:00</td></tr>
+    <tr><td>Reporte Semanal</td><td>Lunes 08:00</td></tr>
+    <tr><td>Alertas</td><td>09:00</td></tr>
+  </table>
+  <p>Para cada sección puede <strong>agregar o eliminar destinatarios</strong> de la lista de correos.</p>
+
+  <h2>24.2 Enviar prueba</h2>
+  <p>Los botones <span class="kbd">Enviar Prueba</span> (Diario / Alertas) envían un correo de verificación a los destinatarios configurados.</p>
+
+  <div class="note"><strong>Nota técnica:</strong> el envío automático requiere que el servidor ejecute el programador de tareas de Laravel (<span class="cred">php artisan schedule:run</span>).</div>
+</div>
+
+<!-- ============ 25. MENSAJERÍA WHATSAPP ============ -->
+<div class="section pagebreak">
+  <h1 id="mensajeria">25. Mensajería WhatsApp</h1>
+  <p>El <strong>Centro de Mensajería WhatsApp</strong> es un módulo de uso exclusivo de la <strong>secretaria</strong>. Permite gestionar las conversaciones de WhatsApp de la empresa: registrar contactos, responder mensajes, ver el historial y controlar los mensajes no leídos, todo en un solo lugar.</p>
+
+  <h2>25.1 Acceso</h2>
+  <p>El módulo aparece en el menú lateral <strong>Mensajería WhatsApp</strong> únicamente para el rol <strong>Secretaria de Oficina</strong>. Los demás roles no lo ven.</p>
+
+  <h2>25.2 Bandeja de conversaciones</h2>
+  <p>La pantalla principal muestra tres tarjetas de resumen (total de conversaciones, sin leer y activas) y una lista de conversaciones con búsqueda. Cada conversación muestra el nombre del contacto, su teléfono, la hora del último mensaje y el contador de mensajes no leídos.</p>
+  <ul>
+    <li><strong>Buscar:</strong> filtra las conversaciones por nombre o teléfono.</li>
+    <li><strong>Nueva Conversación:</strong> crea una conversación con un contacto (nombre y teléfono).</li>
+    <li><strong>Seleccionar:</strong> haga clic en una conversación para abrir el chat. Al abrirla, se marca como leída.</li>
+    <li><strong>Eliminar:</strong> el botón de papelera elimina la conversación y su historial.</li>
+  </ul>
+
+  <h2>25.3 Enviar respuestas</h2>
+  <p>Dentro del chat, escriba la respuesta en el campo inferior y presione <strong>Enviar</strong> o la tecla <strong>Enter</strong>. Los mensajes salientes aparecen en burbujas verdes a la derecha; los entrantes en burbujas blancas a la izquierda.</p>
+  <ul>
+    <li><strong>Marcar como recibido:</strong> registra manualmente un mensaje entrante del contacto (útil cuando la integración automática no está activa).</li>
+    <li><strong>Estado de entrega:</strong> cada mensaje saliente muestra su estado: <em>Enviando...</em>, <em>Enviado</em>, <em>Entregado</em>, <em>Leído</em> o <em>Error</em>.</li>
+  </ul>
+
+  <h2>25.4 Envío real por WhatsApp (API Cloud de Meta)</h2>
+  <p>El sistema puede enviar los mensajes de forma real a través de la <strong>API Cloud de WhatsApp</strong> de Meta. Para activarlo, el administrador debe configurar en el archivo <code>.env</code> del backend:</p>
+  <ul>
+    <li><code class="cred">WHATSAPP_ENABLED=true</code></li>
+    <li><code class="cred">WHATSAPP_ACCESS_TOKEN=&lt;token de acceso permanente de Meta&gt;</code></li>
+    <li><code class="cred">WHATSAPP_PHONE_NUMBER_ID=&lt;id del número de teléfono de negocio&gt;</code></li>
+    <li><code class="cred">WHATSAPP_BUSINESS_PHONE=&lt;número de la empresa, formato internacional&gt;</code></li>
+    <li><code class="cred">WHATSAPP_WEBHOOK_VERIFY_TOKEN=&lt;token de verificación del webhook&gt;</code></li>
+  </ul>
+  <p>Mientras no esté configurado, la pantalla muestra un aviso <strong>"Envío real desactivado"</strong> y los mensajes se registran únicamente en el sistema.</p>
+
+  <h2>25.5 Recepción automática de mensajes</h2>
+  <p>Cuando el webhook está configurado en Meta con la URL <code class="cred">https://SU_SERVIDOR/api/whatsapp/webhook</code>, los mensajes entrantes y las actualizaciones de estado (enviado, entregado, leído) se reciben automáticamente:</p>
+  <ul>
+    <li>Un mensaje de un número nuevo crea una conversación con estado <em>Nueva</em> y un contador de no leídos.</li>
+    <li>Los mensajes de contactos conocidos se agregan a su conversación existente.</li>
+    <li>El estado de entrega de los mensajes salientes se actualiza en tiempo real.</li>
+  </ul>
+  <p>Para configurar el webhook en Meta: agregue el producto WhatsApp en su app de desarrolladores, active los campos <code>messages</code> y registre la URL de verificación con el token configurado en <code>WHATSAPP_WEBHOOK_VERIFY_TOKEN</code>.</p>
+
+  <div class="warn">
+    <strong>Nota:</strong> el envío real requiere una cuenta de negocio de WhatsApp y un número verificado en Meta. Los números de teléfono se normalizan automáticamente al formato internacional (+507 para Panamá).
+  </div>
+</div>
+
+<!-- ============ 26. ESPACIO DE TRABAJO DE LA SECRETARIA ============ -->
+<div class="section pagebreak">
+  <h1 id="secretaria">26. Espacio de Trabajo de la Secretaria</h1>
+  <p>El rol <strong>Secretaria de Oficina</strong> tiene un menú reducido y un <strong>Espacio de Trabajo</strong> propio en el Dashboard que reúne las funciones de secretaría: agenda, recepción, correspondencia, archivo, soporte logístico, apoyo contable y manejo de información confidencial.</p>
+  <p>El menú lateral de la secretaria contiene únicamente: <strong>Dashboard</strong>, <strong>Notas de Oficina</strong> y <strong>Mensajería WhatsApp</strong>. No incluye Clientes ni Reportes.</p>
+
+  <h2>26.1 Gestión de la agenda</h2>
+  <p>Organiza citas y programa reuniones, tanto <strong>presenciales</strong> como <strong>virtuales</strong>. Cada evento registra título, tipo, modalidad, fecha y hora de inicio y fin, participantes, ubicación o enlace y estado (pendiente, confirmada, realizada, cancelada). El sistema <strong>evita automáticamente la superposición</strong> de eventos: si intenta agendar en un horario ya ocupado por otra cita o reunión activa, muestra un aviso y no guarda el evento.</p>
+  <ul>
+    <li><strong>Nuevo evento:</strong> botón azul en la sección Agenda.</li>
+    <li><strong>Editar / eliminar:</strong> botones de lápiz y papelera en cada evento.</li>
+    <li><strong>Modalidad:</strong> presencial (sala, oficina) o virtual (enlace de videollamada).</li>
+  </ul>
+
+  <h2>26.2 Atención al cliente y recepción</h2>
+  <p>Registra la recepción de <strong>visitantes</strong>, <strong>llamadas telefónicas</strong> y <strong>consultas</strong>. Permite canalizar la comunicación hacia el directivo o área correspondiente y registrar el estado (recibido, canalizado, atendido).</p>
+
+  <h2>26.3 Comunicación y correspondencia</h2>
+  <p>La redacción de correos, memorandos, cartas e informes se realiza con el módulo <strong>Notas de Oficina</strong>. La respuesta a consultas y la comunicación con clientes y proveedores se gestiona con <strong>Mensajería WhatsApp</strong>. El widget de correspondencia en el Dashboard ofrece acceso directo a ambos.</p>
+
+  <h2>26.4 Archivo y documentación</h2>
+  <p>Organiza, clasifica y archiva documentos en formato <strong>físico</strong> o <strong>digital</strong>. Cada documento registra título, categoría (contratos, facturación, RRHH, etc.), formato y ubicación (carpeta física o ruta en la nube).</p>
+
+  <h2>26.5 Soporte administrativo y logístico</h2>
+  <p>Gestiona la preparación de <strong>salas de reuniones</strong>, la <strong>compra de suministros</strong> y material de oficina, la organización de <strong>viajes</strong> y las <strong>reservas</strong>. Cada tarea lleva un estado (pendiente, en proceso, completado, cancelado).</p>
+
+  <h2>26.6 Gestión contable básica</h2>
+  <p>El Dashboard muestra el <strong>saldo de la caja chica</strong> y enlaza al módulo <strong>Caja Menuda</strong>, donde se controlan los gastos de oficina, reembolsos y apoyos contables.</p>
+
+  <h2>26.7 Manejo de información confidencial</h2>
+  <p>La secretaria maneja datos sensibles, contratos e información personal. El widget <strong>Información Confidencial</strong> recuerda las buenas prácticas: estricta discreción, archivado protegido por categoría y filtrado de la comunicación hacia los directivos.</p>
+
+  <div class="note">
+    <strong>Nota:</strong> la detección de superposición de la agenda es automática en el backend. Se permite que un evento termine exactamente cuando otro comienza, pero no se permite que se traslapen.
+  </div>
+</div>
+
+<!-- ============ 27. ESPACIO DE TRABAJO DEL SUPERVISOR ============ -->
+<div class="section pagebreak">
+  <h1 id="supervisor">27. Espacio de Trabajo del Supervisor</h1>
+  <p>El rol <strong>Supervisor de planta</strong> tiene un <strong>Espacio de Trabajo</strong> propio en el Dashboard que agrupa las funciones de control de producción, calidad, seguridad y liderazgo de equipo. El menú lateral del supervisor contiene únicamente: <strong>Dashboard</strong>, <strong>Camiones</strong>, <strong>Conductores</strong>, <strong>Viajes</strong> y <strong>Controles Cantera/Planta</strong> (sin Proformas de Carga, Clientes, Inventario, Notas de Oficina ni Reportes).</p>
+
+  <h2>27.1 Control de Producción y Materia Prima</h2>
+  <h3>Planificación</h3>
+  <p>Organiza las <strong>actividades diarias del personal</strong> basándose en los planes de extracción y procesamiento establecidos. Cada actividad registra tipo (extracción, procesamiento, chancado, mezclado, mantenimiento), fecha, horario, área, personal asignado y estado.</p>
+  <h3>Recepción y trituración</h3>
+  <p>Controla las operaciones de <strong>recepción de la caliza</strong> y el <strong>chancado primario y secundario</strong> para asegurar el abastecimiento continuo. Registra la etapa, el material, el tonelaje, el origen y la fecha de procesamiento.</p>
+  <h3>Mezclado (Blending)</h3>
+  <p>Supervisa la <strong>mezcla de materias primas</strong> para cumplir con las especificaciones técnicas del producto final. Registra las materias, la especificación objetivo y el estado de la mezcla.</p>
+
+  <h2>27.2 Gestión de Calidad</h2>
+  <h3>Monitoreo</h3>
+  <p>Vigila que el material cumpla con los parámetros de <strong>pureza y granulometría</strong> requeridos por la industria (agricultura, construcción o química).</p>
+  <h3>Reportes</h3>
+  <p>Registra datos de <strong>producción</strong>, <strong>tonelaje alimentado a la planta</strong> y la <strong>cubicación mensual</strong> de materias primas, visible en el resumen del Dashboard.</p>
+
+  <h2>27.3 Seguridad y Medio Ambiente</h2>
+  <h3>Protocolos</h3>
+  <p>Asegura el cumplimiento estricto de las normativas de seguridad: <strong>uso de EPP</strong> y <strong>protocolos IPERC</strong>.</p>
+  <h3>Control de riesgos</h3>
+  <p>Verifica las condiciones del entorno (<strong>ventilación, polución</strong>) y comunica los riesgos para evitar accidentes y daños ambientales, registrando el nivel de riesgo y el plan de acción.</p>
+
+  <h2>27.4 Liderazgo de Equipo</h2>
+  <h3>Asignación de tareas</h3>
+  <p>Delega funciones al personal técnico y operativo según sus habilidades, con prioridad, fecha límite y estado.</p>
+  <h3>Gestión de personal</h3>
+  <p>Administra los horarios, resuelve conflictos y facilita capacitaciones continuas mediante las tareas y actividades del Espacio de Trabajo.</p>
+
+  <div class="note">
+    <strong>Nota:</strong> el tonelaje del mes se calcula automáticamente sumando los registros de recepción y trituración del mes en curso. Los controles de calidad no conformes y los riesgos altos se resaltan en las tarjetas de resumen.
+  </div>
+</div>
+
+<!-- ============ 28. ESPACIO DE TRABAJO DEL CONTADOR ============ -->
+<div class="section pagebreak">
+  <h1 id="contador">28. Espacio de Trabajo del Contador</h1>
+  <p>El rol <strong>Contador</strong> tiene un <strong>Espacio de Trabajo</strong> propio en el Dashboard especializado en <strong>contabilidad de costos</strong>. Su función principal es registrar y analizar detalladamente cada etapa de la extracción y procesamiento del mineral, desde la explotación en la cantera hasta la trituración, calcinación y distribución del producto final.</p>
+  <p>El menú lateral del contador contiene únicamente: <strong>Dashboard</strong>, <strong>Inventario</strong>, <strong>Facturación</strong>, <strong>Contabilidad</strong>, <strong>Nómina</strong> y <strong>Caja Menuda</strong> (sin Conductores, Clientes, Proveedores, Notas de Oficina ni Reportes).</p>
+
+  <h2>28.1 Control de Costos de Producción</h2>
+  <p>Monitorea los <strong>gastos operativos</strong> (electricidad, combustible para los hornos, maquinaria, explosivos, personal) para determinar el <strong>costo unitario real por tonelada</strong> de cal producida. Al registrar el monto y el tonelaje, el sistema calcula automáticamente el costo por tonelada.</p>
+
+  <h2>28.2 Gestión de Inventarios y Activos</h2>
+  <p>Registra la <strong>depreciación de maquinaria pesada</strong>, <strong>hornos caleros</strong> y la <strong>amortización por el agotamiento de la concesión minera</strong>. Cada activo registra valor de adquisición, vida útil, valor de salvamento y depreciación acumulada; el sistema calcula la depreciación anual lineal.</p>
+
+  <h2>28.3 Análisis de Rentabilidad</h2>
+  <p>Evalúa la eficiencia de los procesos y elabora <strong>presupuestos CAPEX/OPEX</strong> para la gerencia. Cada presupuesto registra lo planificado y lo ejecutado, mostrando la variación.</p>
+
+  <h2>28.4 Cumplimiento Tributario y Ambiental</h2>
+  <p>Asegura el pago de <strong>impuestos específicos del sector extractivo</strong> y maneja las <strong>provisiones financieras</strong> para el futuro cierre de la mina y la mitigación ambiental.</p>
+
+  <div class="note">
+    <strong>Nota:</strong> el costo unitario por tonelada, la depreciación anual y los totales de presupuesto se calculan automáticamente y se muestran en las tarjetas de resumen del Dashboard.
+  </div>
+</div>
+
+<!-- ============ 29. SOLUCIÓN ============ -->
+<div class="section pagebreak">
+  <h1 id="solucion">29. Solución de Problemas</h1>
+
+  <table>
+    <tr><th>Problema</th><th>Solución</th></tr>
+    <tr><td>No puedo iniciar sesión</td><td>Verifique que el correo y la contraseña sean correctos. Si continúa el problema, contacte al administrador para restablecer su contraseña.</td></tr>
+    <tr><td>No veo un módulo en el menú</td><td>Su rol no tiene acceso a ese módulo. Solicite al Super Administrador que ajuste su rol.</td></tr>
+    <tr><td>El mapa en vivo no muestra unidades</td><td>Espere el ciclo de actualización (5 segundos) y verifique que haya viajes o unidades activas. Revise el estado de señal de las unidades.</td></tr>
+    <tr><td>No puedo eliminar un registro</td><td>Algunos registros están protegidos por permisos del rol. Verifique su nivel de acceso.</td></tr>
+    <tr><td>La pantalla se ve en blanco o azul</td><td>Recargue la página (F5). Si persiste, cierre sesión y vuelva a iniciar. Contacte al soporte técnico si el problema continúa.</td></tr>
+    <tr><td>No llega el correo de reportes</td><td>Verifique los destinatarios en Config. Correos y confirme que el programador de tareas está activo en el servidor.</td></tr>
+    <tr><td>Mis mensajes de WhatsApp no llegan al destinatario</td><td>Active el envío real en el archivo <span class="cred">.env</span> del backend (WHATSAPP_ENABLED=true, WHATSAPP_ACCESS_TOKEN y WHATSAPP_PHONE_NUMBER_ID). Sin esa configuración, los mensajes solo se guardan en el sistema.</td></tr>
+    <tr><td>No veo el módulo Mensajería WhatsApp</td><td>El módulo es exclusivo del rol Secretaria de Oficina. Inicie sesión con ese rol para verlo.</td></tr>
+    <tr><td>No puedo agendar un evento que se superpone</td><td>El sistema evita la superposición de citas y reuniones. Cambie el horario a uno libre o actualice el evento existente.</td></tr>
+    <tr><td>No veo Proformas, Clientes, Inventario o Reportes</td><td>El rol de Supervisor no incluye esos módulos. Su Espacio de Trabajo se centra en producción, calidad, seguridad y equipo.</td></tr>
+    <tr><td>No veo Conductores, Clientes, Proveedores o Reportes</td><td>El rol de Contador no incluye esos módulos. Su Espacio de Trabajo se centra en costos de producción, activos, presupuestos y cumplimiento.</td></tr>
+    <tr><td>No puedo agregar un artículo de oficina sin toneladas</td><td>En el anexo "Inventario - Oficina", la unidad se ingresa manualmente (unidad, caja, resma, etc.) y el tipo se asigna automáticamente.</td></tr>
+  </table>
+
+  <h2>29.1 Soporte</h2>
+  <p>Para asistencia técnica contacte a:</p>
+  <ul>
+    <li><strong>Empresa:</strong> Caliza Los Osos</li>
+    <li><strong>Correo:</strong> hola@calizalosos.com</li>
+    <li><strong>Teléfono:</strong> +(507) 900-0000</li>
+  </ul>
+
+  <p style="text-align:center; margin-top:40px; color:#6b7280; font-size:9pt;">Fin del Manual de Usuario · Caliza Los Osos · © 2026</p>
+</div>
+
+<!-- ============ 30. INSTALACIÓN Y PUBLICACIÓN ============ -->
+<div class="section pagebreak">
+  <h1 id="instalacion">30. Instalación en Dispositivos y Publicación en Internet</h1>
+  <p>El sistema Caliza 360 está compuesto por tres piezas: el <strong>backend</strong> (Laravel, la API con la base de datos), el <strong>frontend web</strong> (React) y la <strong>app móvil</strong> (Flutter, para teléfonos y tabletas). En esta sección se explica cómo instalar la app en los distintos dispositivos y cómo publicar el sistema para que sea accesible desde internet (no solo desde la computadora local).</p>
+
+  <h2>30.1 Instalar en Android (teléfono y tableta)</h2>
+  <p>La app de Android ya está compilada en el archivo <span class="cred">Caliza360_Android.apk</span> (54.6 MB) ubicado en la carpeta raíz del proyecto. La misma app funciona en teléfonos y tabletas Android.</p>
+  <ol>
+    <li>Copie el archivo <span class="cred">Caliza360_Android.apk</span> al teléfono o tableta (por USB, correo, WhatsApp o almacenamiento en la nube).</li>
+    <li>Abra el archivo en el dispositivo. Android pedirá permiso para instalar aplicaciones de fuentes desconocidas; acéptelo.</li>
+    <li>Toque <strong>Instalar</strong> y luego <strong>Abrir</strong>.</li>
+    <li>Inicie sesión con el correo y la contraseña de su usuario.</li>
+  </ol>
+
+  <div class="warn">
+    <strong>Importante:</strong> el APK actual apunta al servidor <span class="cred">http://192.168.0.12:8000/api</span>. Para que funcione, la computadora que ejecuta el sistema debe estar encendida y conectada a la misma red Wi-Fi que el teléfono. Si el servidor se publica en internet (sección 30.4), se debe recompilar el APK con la dirección pública (sección 30.5).
+  </div>
+
+  <h2>30.2 Instalar en iOS (iPhone y iPad)</h2>
+  <div class="note">
+    <strong>Requisitos:</strong> una computadora <strong>Mac</strong> con <strong>Xcode</strong> instalado y una cuenta de desarrollador de Apple (Apple Developer Program, US$ 99 por año). No es posible generar el instalador de iOS desde Windows.
+  </div>
+  <ol>
+    <li>Abra el proyecto Flutter <span class="cred">C:\CALIZA 360\mobile</span> en su Mac (copie la carpeta completa del proyecto).</li>
+    <li>Instale los paquetes: <span class="cred">flutter pub get</span>.</li>
+    <li>Conecte su cuenta de Apple en Xcode: <strong>Xcode → Settings → Accounts</strong>.</li>
+    <li>Abra <span class="cred">mobile\ios\Runner.xcworkspace</span> en Xcode y seleccione su equipo (Team) en <strong>Signing &amp; Capabilities</strong>.</li>
+    <li>Compile: <span class="cred">flutter build ipa</span>.</li>
+    <li>Publique con <strong>Xcode → Organizer → Distribuir</strong> (App Store o distribución interna) o instale en un iPhone con <span class="cred">flutter run</span>.</li>
+  </ol>
+
+  <h2>30.3 Instalar en computadora (Windows, Linux, macOS)</h2>
+  <div class="note">
+    <strong>Windows:</strong> requiere <strong>Visual Studio 2022</strong> con la carga de trabajo "Desarrollo de escritorio con C++". <strong>macOS:</strong> requiere Xcode. <strong>Linux:</strong> requiere GTK 3 y build tools (Clang, CMake, Ninja).
+  </div>
+  <ol>
+    <li>Instale Visual Studio 2022 con el workload "Desarrollo de escritorio con C++" (Windows).</li>
+    <li>Desde la carpeta <span class="cred">C:\CALIZA 360\mobile</span> ejecute: <span class="cred">flutter create . --platforms=windows</span> (solo la primera vez).</li>
+    <li>Compile el instalador: <span class="cred">flutter build windows</span> (Windows) o <span class="cred">flutter build macos</span> (Mac).</li>
+    <li>El instalador quedará en <span class="cred">build\windows\x64\runner\Release</span>; distribuya esa carpeta o cree un instalador MSI con <span class="cred">Inno Setup</span> o <span class="cred">WiX</span>.</li>
+  </ol>
+
+  <h2>30.4 Publicar el sistema en internet</h2>
+  <p>Para que el sistema sea accesible desde cualquier lugar (no solo la red local), el <strong>backend Laravel</strong> debe estar en un servidor público con un dominio y HTTPS. El <strong>frontend web</strong> (React) se publica aparte como sitio estático. A continuación se listan las opciones principales.</p>
+
+  <table>
+    <tr><th>Opción</th><th>Costo</th><th>Para qué sirve</th><th>Dificultad</th></tr>
+    <tr><td><strong>Railway</strong> (railway.app)</td><td>Gratis limitado / pago</td><td>Backend Laravel + base de datos MySQL/PostgreSQL</td><td>Media</td></tr>
+    <tr><td><strong>Render</strong> (render.com)</td><td>Gratis limitado / pago</td><td>Backend Laravel (Web Service) + base de datos</td><td>Media</td></tr>
+    <tr><td><strong>VPS</strong> (DigitalOcean, Vultr, Linode, Hostinger)</td><td>US$ 4-12/mes</td><td>Backend + frontend + dominio propio (recomendado para producción)</td><td>Alta</td></tr>
+    <tr><td><strong>Hosting PHP compartido</strong> (cPanel con PHP 8.2+)</td><td>US$ 3-8/mes</td><td>Backend Laravel en alojamiento tradicional</td><td>Media</td></tr>
+    <tr><td><strong>Firebase Hosting</strong> (firebase.google.com)</td><td>Gratis (cuota generosa)</td><td>Solo el frontend web (React); el backend requiere otra opción</td><td>Baja</td></tr>
+    <tr><td><strong>Netlify / Vercel</strong></td><td>Gratis (frontend)</td><td>Solo el frontend web (React)</td><td>Baja</td></tr>
+  </table>
+
+  <div class="note">
+    <strong>Recomendación:</strong> para producción use un <strong>VPS</strong> (p. ej. DigitalOcean US$ 6/mes) con Nginx + PHP 8.2 + MySQL, un dominio propio (p. ej. <span class="cred">app.calizalosos.com</span>) y certificado HTTPS gratuito de <strong>Let's Encrypt</strong>. El frontend React se publica en Firebase Hosting o en la misma carpeta del VPS.
+  </div>
+
+  <h3>30.4.1 Resumen de pasos en un servidor (VPS)</h3>
+  <ol>
+    <li>Configure el servidor con PHP 8.2, Composer, MySQL y Nginx.</li>
+    <li>Suba el código del backend: <span class="cred">cd backend && composer install --no-dev</span>.</li>
+    <li>Configure el archivo <span class="cred">.env</span> (base de datos, APP_URL con su dominio, claves).</li>
+    <li>Ejecute: <span class="cred">php artisan key:generate && php artisan migrate --force</span>.</li>
+    <li>Sirva la carpeta <span class="cred">backend\public</span> con Nginx y configure HTTPS (Let's Encrypt).</li>
+    <li>Compile el frontend y súbalo a Firebase Hosting o al servidor: <span class="cred">cd web && npm run build</span> y suba la carpeta <span class="cred">web\dist</span>.</li>
+  </ol>
+
+  <div class="warn">
+    <strong>Importante (HTTPS):</strong> la Mensajería WhatsApp de Meta requiere que la URL del webhook sea pública y con HTTPS. Una vez que el sistema esté publicado, debe registrar la URL <span class="cred">https://sudominio.com/api/whatsapp/webhook</span> en el panel de Meta (PASOS_FIREBASE.md) y activar <span class="cred">WHATSAPP_ENABLED=true</span> en el <span class="cred">.env</span>.
+  </div>
+
+  <h2>30.5 Recompilar la app con otra dirección (URL)</h2>
+  <p>Cuando el sistema esté publicado en internet, recompile el APK de Android para que apunte a la dirección pública en lugar de la red local:</p>
+  <ol>
+    <li>Abra una terminal en <span class="cred">C:\CALIZA 360\mobile</span>.</li>
+    <li>Ejecute (reemplace la URL por su dominio real):</li>
+  </ol>
+  <p class="step"><span class="cred">flutter build apk --release --dart-define=API_BASE_URL=https://app.calizalosos.com/api</span></p>
+  <p>El APK se genera en <span class="cred">build\app\outputs\flutter-apk\app-release.apk</span> y se distribuye igual que en la sección 30.1.</p>
+
+  <h2>30.6 Instalar desde la web (PWA)</h2>
+  <p>El frontend web (React) es compatible con "Instalar aplicación" de Chrome, Edge y Safari en Android/iOS. Al abrir el sistema publicado y tocar <strong>Instalar aplicación</strong> en el menú del navegador, la app se agrega a la pantalla de inicio como una aplicación nativa. Esto funciona tanto en celulares como en tabletas.</p>
+
+  <p style="text-align:center; margin-top:40px; color:#6b7280; font-size:9pt;">Fin del Manual de Usuario · Caliza Los Osos · © 2026</p>
+</div>
+
+</body>
+</html>

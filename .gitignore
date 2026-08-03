@@ -1,0 +1,48 @@
+# Dependencias
+node_modules/
+vendor/
+
+# Builds
+web/dist/
+web/dev-dist/
+backend/public/build/
+backend/public/hot
+
+# Entornos
+.env
+.env.local
+.env.*.local
+web/.env.production
+
+# Base de datos
+backend/database/*.sqlite
+backend/database/*.sqlite-journal
+
+# Logs
+*.log
+backend/storage/logs/*
+!backend/storage/logs/.gitignore
+backend/storage/framework/cache/*
+backend/storage/framework/sessions/*
+backend/storage/framework/views/*
+backend/storage/framework/testing/*
+backend/storage/framework/pail/*
+
+# Credenciales
+backend/storage/app/service-account.json
+**/google-services.json
+**/GoogleService-Info.plist
+
+# Firebase
+.firebase/
+web/.firebase/
+
+# Tuneles
+tunnel*.log
+
+# Otros
+*.apk
+.phpunit.result.cache
+.idea/
+.vscode/
+Thumbs.db

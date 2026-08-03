@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Custom styles for Caliza Los Osos */
+
+/* Fondo oscuro global para cuidar la visión (modo dark por defecto). */
+.dark body {
+  background-color: #030712;
+}
+
+.dark .bg-white { background-color: #111827; }
+.dark .bg-gray-50 { background-color: #0f172a; }
+.dark .bg-gray-100 { background-color: #0b1220; }
+
+.dark .text-gray-900 { color: #f3f4f6; }
+.dark .text-gray-800 { color: #e5e7eb; }
+.dark .text-gray-700 { color: #d1d5db; }
+.dark .text-gray-600 { color: #9ca3af; }
+
+.dark .border-gray-200 { border-color: #1f2937; }
+.dark .border-gray-300 { border-color: #374151; }
+
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: #1f2937;
+  color: #f3f4f6;
+  border-color: #374151;
+}
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #6b7280;
+}
+
+/* Tablas y celdas */
+.dark table thead th {
+  color: #9ca3af;
+  border-color: #1f2937;
+}
+.dark .bg-white:hover { background-color: #1f2937; }
