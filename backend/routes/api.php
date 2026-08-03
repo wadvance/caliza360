@@ -42,6 +42,11 @@ use App\Http\Controllers\Api\AccountantDashboardController;
 // Public routes
 Route::post('/auth/login', [AuthController::class, 'login']);
 
+// Health check para Render
+Route::get('/up', function () {
+    return response()->json(['status' => 'ok']);
+});
+
 // WhatsApp Cloud API webhook (Meta llama sin autenticación)
 Route::get('/whatsapp/webhook', [WhatsAppController::class, 'webhookVerify']);
 Route::post('/whatsapp/webhook', [WhatsAppController::class, 'webhook']);

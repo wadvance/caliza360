@@ -10,9 +10,11 @@ RUN apk add --no-cache \
     libzip-dev \
     icu-dev \
     oniguruma-dev \
+    postgresql-dev \
     $PHPIZE_DEPS \
   && docker-php-ext-install \
     pdo_mysql \
+    pdo_pgsql \
     mbstring \
     zip \
     intl \
@@ -36,6 +38,7 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
 
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/supervisord.conf /etc/supervisord.conf
+COPY docker/www.conf /usr/local/etc/php-fpm.d/zz-www.conf
 COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
