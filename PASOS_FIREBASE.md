@@ -2,14 +2,14 @@
 
 ## Estado Actual
 
-El proyecto Firebase `caliza360` **ya existe**. El `GoogleService-Info.plist` ya tiene credenciales reales.
+El proyecto Firebase `calizalososos` **ya existe**. El `GoogleService-Info.plist` ya tiene credenciales reales.
 
 | Dato | Valor |
 |---|---|
-| **Project ID** | `caliza360` |
+| **Project ID** | `calizalososos` |
 | **API Key** | `AIzaSyAfcinHAhD075EwXkMvB66WbXhFdgsGbw8` |
 | **Sender ID** | `321221946315` |
-| **Storage Bucket** | `caliza360.firebasestorage.app` |
+| **Storage Bucket** | `calizalososos.firebasestorage.app` |
 | **iOS App ID** | `1:321221946315:ios:1e6c40ab8b0887310ca44e` |
 | **iOS Bundle ID** | `com.calizalosos.mobile` |
 
@@ -17,7 +17,7 @@ El proyecto Firebase `caliza360` **ya existe**. El `GoogleService-Info.plist` ya
 
 ## Paso 1: Verificar/Completar Proyecto en Firebase Console
 
-Ve a [https://console.firebase.google.com](https://console.firebase.google.com) y selecciona el proyecto `caliza360`.
+Ve a [https://console.firebase.google.com](https://console.firebase.google.com) y selecciona el proyecto `calizalososos`.
 
 ### 1.1 Verificar que Authentication está habilitado
 1. En el menú lateral, ve a **Authentication**
@@ -256,7 +256,7 @@ npm run dev
 | `GoogleService-Info.plist` | `mobile/ios/Runner/` | ✅ Ya existe con credenciales reales |
 | `google-services.json` | `mobile/android/app/` | ⏳ **Necesitas descargar** (Paso 2) |
 | `service-account.json` | `backend/storage/app/` | ⏳ **Necesitas descargar** (Paso 4) |
-| `.env` (Firebase) | `backend/` | ✅ Configurado con project_id `caliza360` |
+| `.env` (Firebase) | `backend/` | ✅ Configurado con project_id `calizalososos` |
 | `firebase_options.dart` | `mobile/lib/` | ✅ Configurado con credenciales reales |
 | `AppDelegate.swift` | `mobile/ios/Runner/` | ✅ Configurado con `FirebaseApp.configure()` |
 | `firebase.ts` | `web/src/config/` | ✅ Creado (necesita `appId` real) |

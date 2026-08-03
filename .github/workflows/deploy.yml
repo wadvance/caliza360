@@ -45,4 +45,4 @@ jobs:
           args: deploy --only hosting
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          PROJECT_ID: caliza360
+          PROJECT_ID: calizalososos

@@ -3,12 +3,12 @@ import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 
-// Proyecto Firebase: caliza360
+// Proyecto Firebase: calizalososos
 const firebaseConfig = {
   apiKey: "AIzaSyAfcinHAhD075EwXkMvB66WbXhFdgsGbw8",
-  authDomain: "caliza360.firebaseapp.com",
-  projectId: "caliza360",
-  storageBucket: "caliza360.firebasestorage.app",
+  authDomain: "calizalososos.firebaseapp.com",
+  projectId: "calizalososos",
+  storageBucket: "calizalososos.firebasestorage.app",
   messagingSenderId: "321221946315",
   appId: "1:321221946315:web:95426f02208db5040ca44e"
 };

@@ -63,12 +63,12 @@ export default function Login() {
                   id="email"
                   name="email"
                   type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  placeholder="admin@calizalosos.com"
+autoComplete="off"
+                   required
+                   value={email}
+                   onChange={(e) => setEmail(e.target.value)}
+                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                   placeholder="admin@calizalosos.com"
                 />
               </div>
             </div>
@@ -82,11 +82,11 @@ export default function Login() {
                   id="password"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-900 dark:text-white dark:border-gray-600"
+autoComplete="new-password"
+                   required
+                   value={password}
+                   onChange={(e) => setPassword(e.target.value)}
+                   className="appearance-none block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-900 dark:text-white dark:border-gray-600"
                   placeholder="••••••••"
                 />
                 <button
@@ -107,8 +107,18 @@ export default function Login() {
                 disabled={loading}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Ingresando...' : 'Iniciar Sesión'}
+                {loading ? 'Ingresando...' : 'Iniciar Sesi�n'}
               </button>
+            </div>
+            <div className="text-center">
+              <a
+                href="https://github.com/wadvance/calizalososos/releases/download/v1.0.0/app-release.apk"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+              >
+                Descargar app para Android
+              </a>
             </div>
           </form>
         </div>

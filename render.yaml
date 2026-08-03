@@ -1,14 +1,14 @@
 databases:
-  - name: caliza360-db
+  - name: calizalososos-db
     plan: free
-    databaseName: caliza360
+    databaseName: calizalososos
 
 services:
   - type: web
-    name: caliza360-api
+    name: calizalososos-api
     runtime: docker
     plan: free
-    repo: https://github.com/wadvance/caliza360
+    repo: https://github.com/wadvance/calizalososos
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     healthCheckPath: /api/up
@@ -33,5 +33,5 @@ services:
         value: stderr
       - key: DATABASE_URL
         fromDatabase:
-          name: caliza360-db
+          name: calizalososos-db
           property: connectionString
