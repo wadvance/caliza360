@@ -11,7 +11,7 @@ services:
     repo: https://github.com/wadvance/caliza360
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
-    healthCheckPath: /up
+    healthCheckPath: /api/up
     envVars:
       - key: APP_ENV
         value: production
