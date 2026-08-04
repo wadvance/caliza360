@@ -89,18 +89,35 @@ class AuthApiTest extends TestCase
         $response->assertStatus(401);
     }
 
-    public function test_login_rejected_when_user_has_active_session_on_another_device(): void
+    public function test_login_revokes_previous_token_and_emits_new_one(): void
     {
-        $this->user->createToken('auth-token');
+        $this->user->createToken('old-token');
+
+        $this->assertSame(1, $this->user->tokens()->count());
 
         $response = $this->postJson('/api/auth/login', [
             'email' => 'admin@calizalosos.com',
             'password' => 'password123',
         ]);
 
-        $response->assertStatus(422)
-                 ->assertJsonValidationErrors('email')
-                 ->assertJsonPath('errors.email.0', 'Usuario ya conectado. Cierre sesión en el otro dispositivo para continuar.');
+        $response->assertStatus(200)
+                 ->assertJsonStructure(['token']);
+
+        // Solo debe quedar el token recién emitido (el previo fue revocado).
+        $this->assertSame(1, $this->user->tokens()->count());
+    }
+
+    public function test_login_always_allows_reentry_even_with_previous_tokens(): void
+    {
+        $this->user->createToken('first-token');
+        $this->user->createToken('second-token');
+
+        $this->postJson('/api/auth/login', [
+            'email' => 'admin@calizalosos.com',
+            'password' => 'password123',
+        ])->assertStatus(200);
+
+        $this->assertSame(1, $this->user->tokens()->count());
     }
 
     public function test_logout_deletes_token_and_allows_relogin(): void
