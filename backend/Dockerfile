@@ -7,6 +7,7 @@ RUN apk add --no-cache \
     curl \
     git \
     unzip \
+    ca-certificates \
     libzip-dev \
     icu-dev \
     oniguruma-dev \
@@ -22,7 +23,7 @@ RUN apk add --no-cache \
     fileinfo \
   && docker-php-ext-enable opcache
 
-RUN curl -sS https://getcomposer.org/installer | php --install-dir=/usr/local/bin --filename=composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
