@@ -31,8 +31,9 @@ COPY . .
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autload \
-  && php artisan config:clear || true
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+RUN php artisan config:clear || true
 
 RUN mkdir -p /var/www/storage/framework/{sessions,views,cache} \
   && mkdir -p /var/www/bootstrap/cache \
