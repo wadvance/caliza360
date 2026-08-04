@@ -27,22 +27,13 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-COPY backend/composer.json backend/composer.lock backend/artisan ./
-COPY backend/bootstrap bootstrap
-COPY backend/config config
+COPY backend/ .
 
-RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
-
-COPY backend/app app
-COPY backend/database database
-COPY backend/public public
-COPY backend/resources resources
-COPY backend/routes routes
-COPY backend/storage storage
-COPY backend/.env.example .
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
 RUN cp .env.example .env 2>/dev/null || echo "APP_KEY=" > .env
 RUN php artisan key:generate --force || true
+RUN php artisan package:discover --ansi || true
 RUN php artisan config:clear || true
 
 RUN mkdir -p storage/framework/{sessions,views,cache} \
