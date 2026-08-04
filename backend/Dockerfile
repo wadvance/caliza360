@@ -27,23 +27,23 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-COPY ./backend/composer.json ./backend/composer.lock ./
+COPY backend/composer.json backend/composer.lock ./
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
-COPY ./backend/ ./
+COPY backend/ ./
 
 RUN cp .env.example .env 2>/dev/null || echo "APP_KEY=" > .env
 RUN php artisan key:generate --force || true
 RUN php artisan config:clear || true
 
-RUN mkdir -p /var/www/storage/framework/{sessions,views,cache} \
-  && mkdir -p /var/www/bootstrap/cache \
-  && chmod -R 777 /var/www/storage /var/www/bootstrap/cache
+RUN mkdir -p storage/framework/{sessions,views,cache} \
+  && mkdir -p bootstrap/cache \
+  && chmod -R 777 storage bootstrap/cache
 
-COPY ./backend/docker/nginx.conf /etc/nginx/nginx.conf
-COPY ./backend/docker/supervisord.conf /etc/supervisord.conf
-COPY ./backend/docker/www.conf /usr/local/etc/php-fpm.d/zz-www.conf
-COPY ./backend/docker/entrypoint.sh /entrypoint.sh
+COPY backend/docker/nginx.conf /etc/nginx/nginx.conf
+COPY backend/docker/supervisord.conf /etc/supervisord.conf
+COPY backend/docker/www.conf /usr/local/etc/php-fpm.d/zz-www.conf
+COPY backend/docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 8080
