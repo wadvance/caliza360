@@ -5,11 +5,12 @@ databases:
 
 services:
   - type: web
-    name: caliza360-api
+    name: calizalososos-api
     runtime: docker
     plan: free
     repo: https://github.com/wadvance/calizalososos
     dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
     healthCheckPath: /api/up
     envVars:
       - key: APP_ENV
@@ -17,7 +18,7 @@ services:
       - key: APP_DEBUG
         value: "false"
       - key: APP_URL
-        value: https://caliza360-api.onrender.com
+        value: https://calizalososos-api.onrender.com
       - key: APP_KEY
         generateValue: true
       - key: DB_CONNECTION

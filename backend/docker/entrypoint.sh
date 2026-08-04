@@ -8,13 +8,7 @@ mkdir -p storage/framework/sessions storage/framework/views storage/framework/ca
 echo "Setting APP_KEY..."
 if [ -z "$APP_KEY" ]; then
   php artisan key:generate --force
-elif [ "${APP_KEY#base64:}" = "$APP_KEY" ]; then
-  export APP_KEY="base64:${APP_KEY}"
 fi
-
-echo "Clearing and caching config..."
-php artisan config:clear || true
-php artisan config:cache || true
 
 echo "Running Laravel migrations..."
 php artisan migrate --force || echo "Migration failed, continuing..."

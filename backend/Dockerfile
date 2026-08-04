@@ -27,7 +27,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
-COPY backend/ .
+COPY . .
 
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
@@ -40,10 +40,10 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
   && mkdir -p bootstrap/cache \
   && chmod -R 777 storage bootstrap/cache
 
-COPY backend/docker/nginx.conf /etc/nginx/nginx.conf
-COPY backend/docker/supervisord.conf /etc/supervisord.conf
-COPY backend/docker/www.conf /usr/local/etc/php-fpm.d/zz-www.conf
-COPY backend/docker/entrypoint.sh /entrypoint.sh
+COPY docker/nginx.conf /etc/nginx/nginx.conf
+COPY docker/supervisord.conf /etc/supervisord.conf
+COPY docker/www.conf /usr/local/etc/php-fpm.d/zz-www.conf
+COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 8080
