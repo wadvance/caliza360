@@ -89,6 +89,39 @@ class AuthApiTest extends TestCase
         $response->assertStatus(401);
     }
 
+    public function test_login_rejected_when_user_has_active_session_on_another_device(): void
+    {
+        $this->user->createToken('auth-token');
+
+        $response = $this->postJson('/api/auth/login', [
+            'email' => 'admin@calizalosos.com',
+            'password' => 'password123',
+        ]);
+
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors('email')
+                 ->assertJsonPath('errors.email.0', 'Usuario ya conectado. Cierre sesión en el otro dispositivo para continuar.');
+    }
+
+    public function test_logout_deletes_token_and_allows_relogin(): void
+    {
+        $token = $this->user->createToken('auth-token')->plainTextToken;
+
+        $this->withHeader('Authorization', "Bearer $token")
+             ->postJson('/api/auth/logout')
+             ->assertStatus(200);
+
+        $this->assertSame(0, $this->user->tokens()->count());
+
+        $response = $this->postJson('/api/auth/login', [
+            'email' => 'admin@calizalosos.com',
+            'password' => 'password123',
+        ]);
+
+        $response->assertStatus(200)
+                 ->assertJsonStructure(['token']);
+    }
+
     public function test_register_new_user(): void
     {
         $admin = User::factory()->create(['role' => 'super_admin']);

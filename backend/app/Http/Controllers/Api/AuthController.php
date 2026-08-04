@@ -26,6 +26,13 @@ class AuthController extends Controller
             ]);
         }
 
+        // Seguridad: impedir que el usuario tenga sesiones simultáneas en otro dispositivo.
+        if ($user->tokens()->count() > 0) {
+            throw ValidationException::withMessages([
+                'email' => ['Usuario ya conectado. Cierre sesión en el otro dispositivo para continuar.'],
+            ]);
+        }
+
         $token = $user->createToken('auth-token')->plainTextToken;
 
         return response()->json([
