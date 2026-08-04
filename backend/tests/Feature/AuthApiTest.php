@@ -139,6 +139,26 @@ class AuthApiTest extends TestCase
                  ->assertJsonStructure(['token']);
     }
 
+    public function test_revoked_token_returns_401(): void
+    {
+        $old = $this->user->createToken('old-token')->plainTextToken;
+
+        // Simula la revocación que hace login(): elimina todos los tokens del usuario.
+        $this->user->tokens()->delete();
+
+        $response = $this->withHeader('Authorization', "Bearer $old")
+                         ->getJson('/api/auth/me');
+
+        $response->assertStatus(401);
+    }
+
+    public function test_missing_token_returns_401(): void
+    {
+        $response = $this->getJson('/api/auth/me');
+
+        $response->assertStatus(401);
+    }
+
     public function test_register_new_user(): void
     {
         $admin = User::factory()->create(['role' => 'super_admin']);
