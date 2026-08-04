@@ -28,12 +28,12 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www
 
 COPY backend/composer.json backend/composer.lock backend/artisan ./
+COPY backend/bootstrap bootstrap
+COPY backend/config config
 
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
 COPY backend/app app
-COPY backend/bootstrap bootstrap
-COPY backend/config config
 COPY backend/database database
 COPY backend/public public
 COPY backend/resources resources
