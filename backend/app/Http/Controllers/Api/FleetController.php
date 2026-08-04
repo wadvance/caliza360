@@ -19,83 +19,74 @@ class FleetController extends Controller
      */
     public function live(Request $request)
     {
-        try {
-            $radiusKm = (float) ($request->query('radius_km', config('fleet.geofence_radius_km', 2)) ?: 2);
+        $radiusKm = (float) ($request->query('radius_km', config('fleet.geofence_radius_km', 2)) ?: 2);
 
-            $trips = Trip::with('driver:id,name,phone', 'truck:id,name,plate')
-                ->whereIn('status', ['scheduled', 'in_transit'])
-                ->get();
+        $trips = Trip::with('driver:id,name,phone', 'truck:id,plate,brand,model')
+            ->whereIn('status', ['scheduled', 'in_transit'])
+            ->get();
 
-            $proformas = LoadProforma::with('driver:id,name,phone', 'truck:id,name,plate')
-                ->whereIn('status', ['created', 'loaded', 'in_transit'])
-                ->get();
+        $proformas = LoadProforma::with('driver:id,name,phone', 'truck:id,plate,brand,model')
+            ->whereIn('status', ['created', 'loaded', 'in_transit'])
+            ->get();
 
-            $units = collect();
+        $units = collect();
 
-            foreach ($trips as $trip) {
-                $last = $trip->locations()->latest('recorded_at')->first();
+        foreach ($trips as $trip) {
+            $last = $trip->locations()->latest('recorded_at')->first();
 
-                $units->push($this->unit([
-                    'type' => 'viaje',
-                    'id' => $trip->id,
-                    'status' => $trip->status,
-                    'origin_name' => $trip->origin_name,
-                    'destination_name' => $trip->destination_name,
-                    'material_type' => $trip->material_type,
-                    'weight' => $trip->weight,
-                    'driver_name' => $trip->driver?->name,
-                    'driver_phone' => $trip->driver?->phone,
-                    'truck_plate' => $trip->truck?->plate,
-                    'origin_lat' => $trip->origin_lat,
-                    'origin_lng' => $trip->origin_lng,
-                    'destination_lat' => $trip->destination_lat,
-                    'destination_lng' => $trip->destination_lng,
-                    'location' => $last,
-                ], $radiusKm));
-            }
-
-            foreach ($proformas as $proforma) {
-                $last = $proforma->locations()->latest('recorded_at')->first();
-
-                $units->push($this->unit([
-                    'type' => 'cantera',
-                    'id' => $proforma->id,
-                    'status' => $proforma->status,
-                    'origin_name' => $proforma->origin_name ?? $proforma->origin_quarry ?? 'Cantera',
-                    'destination_name' => $proforma->destination_name,
-                    'material_type' => $proforma->material_type,
-                    'weight' => $proforma->weight_tons,
-                    'driver_name' => $proforma->driver?->name,
-                    'driver_phone' => $proforma->driver?->phone,
-                    'truck_plate' => $proforma->truck?->plate,
-                    'origin_lat' => $proforma->origin_lat,
-                    'origin_lng' => $proforma->origin_lng,
-                    'destination_lat' => $proforma->destination_lat,
-                    'destination_lng' => $proforma->destination_lng,
-                    'location' => $last,
-                ], $radiusKm));
-            }
-
-            $units = $units->sortByDesc(fn ($u) => $u['last_update'] ?? '')->values();
-
-            return response()->json([
-                'radius_km' => $radiusKm,
-                'zones' => [
-                    'in_quarry' => $units->where('zone', 'in_quarry')->count(),
-                    'on_route' => $units->where('zone', 'on_route')->count(),
-                    'at_destination' => $units->where('zone', 'at_destination')->count(),
-                    'unknown' => $units->where('zone', 'unknown')->count(),
-                ],
-                'units' => $units,
-            ]);
-        } catch (\Throwable $e) {
-            return response()->json([
-                'message' => 'Server Error',
-                'error' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-            ], 500);
+            $units->push($this->unit([
+                'type' => 'viaje',
+                'id' => $trip->id,
+                'status' => $trip->status,
+                'origin_name' => $trip->origin_name,
+                'destination_name' => $trip->destination_name,
+                'material_type' => $trip->material_type,
+                'weight' => $trip->weight,
+                'driver_name' => $trip->driver?->name,
+                'driver_phone' => $trip->driver?->phone,
+                'truck_plate' => $trip->truck?->plate,
+                'origin_lat' => $trip->origin_lat,
+                'origin_lng' => $trip->origin_lng,
+                'destination_lat' => $trip->destination_lat,
+                'destination_lng' => $trip->destination_lng,
+                'location' => $last,
+            ], $radiusKm));
         }
+
+        foreach ($proformas as $proforma) {
+            $last = $proforma->locations()->latest('recorded_at')->first();
+
+            $units->push($this->unit([
+                'type' => 'cantera',
+                'id' => $proforma->id,
+                'status' => $proforma->status,
+                'origin_name' => $proforma->origin_name ?? $proforma->origin_quarry ?? 'Cantera',
+                'destination_name' => $proforma->destination_name,
+                'material_type' => $proforma->material_type,
+                'weight' => $proforma->weight_tons,
+                'driver_name' => $proforma->driver?->name,
+                'driver_phone' => $proforma->driver?->phone,
+                'truck_plate' => $proforma->truck?->plate,
+                'origin_lat' => $proforma->origin_lat,
+                'origin_lng' => $proforma->origin_lng,
+                'destination_lat' => $proforma->destination_lat,
+                'destination_lng' => $proforma->destination_lng,
+                'location' => $last,
+            ], $radiusKm));
+        }
+
+        $units = $units->sortByDesc(fn ($u) => $u['last_update'] ?? '')->values();
+
+        return response()->json([
+            'radius_km' => $radiusKm,
+            'zones' => [
+                'in_quarry' => $units->where('zone', 'in_quarry')->count(),
+                'on_route' => $units->where('zone', 'on_route')->count(),
+                'at_destination' => $units->where('zone', 'at_destination')->count(),
+                'unknown' => $units->where('zone', 'unknown')->count(),
+            ],
+            'units' => $units,
+        ]);
     }
 
     protected function unit(array $t, float $radiusKm): array

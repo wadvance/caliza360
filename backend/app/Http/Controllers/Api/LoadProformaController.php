@@ -236,7 +236,7 @@ class LoadProformaController extends Controller
      */
     public function live(Request $request)
     {
-        $query = LoadProforma::with('driver:id,name,phone', 'truck:id,name,plate')
+        $query = LoadProforma::with('driver:id,name,phone', 'truck:id,plate,brand,model')
             ->whereIn('status', ['created', 'loaded', 'in_transit']);
 
         $proformas = $query->latest('date')->get()->map(function ($p) {

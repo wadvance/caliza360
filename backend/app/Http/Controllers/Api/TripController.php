@@ -489,7 +489,7 @@ class TripController extends Controller
      */
     public function liveVehicle(Request $request)
     {
-        $query = Trip::with('driver:id,name,phone', 'truck:id,name,plate')
+        $query = Trip::with('driver:id,name,phone', 'truck:id,plate,brand,model')
             ->whereIn('status', ['in_transit', 'scheduled']);
 
         if ($request->has('status')) {
@@ -619,7 +619,7 @@ class TripController extends Controller
     {
         $radiusKm = (float) ($request->query('radius_km', config('fleet.geofence_radius_km', 2)) ?: 2);
 
-        $trips = Trip::with('driver:id,name,phone', 'truck:id,name,plate')
+        $trips = Trip::with('driver:id,name,phone', 'truck:id,plate,brand,model')
             ->whereIn('status', ['in_transit'])
             ->get()
             ->map(function ($trip) use ($radiusKm) {
