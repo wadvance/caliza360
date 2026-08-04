@@ -33,6 +33,8 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
+RUN cp .env.example .env 2>/dev/null || echo "APP_KEY=" > .env
+RUN php artisan key:generate --force || true
 RUN php artisan config:clear || true
 
 RUN mkdir -p /var/www/storage/framework/{sessions,views,cache} \
