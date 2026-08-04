@@ -30,7 +30,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _notificationsEnabled = prefs.getBool('notifications_enabled') ?? true;
       _autoSync = prefs.getBool('auto_sync') ?? true;
-      _serverUrl = prefs.getString('server_url') ?? 'http://localhost:8000/api';
+      _serverUrl = prefs.getString('server_url') ?? 'https://calizalososos-api.onrender.com/api';
     });
   }
 

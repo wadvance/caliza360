@@ -1,12 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  static const String _defaultBaseUrl = 'http://10.0.2.2:8000/api';
   static const String _compiledBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://10.0.2.2:8000/api',
+    defaultValue: 'https://calizalososos-api.onrender.com/api',
   );
   String? _token;
 
@@ -24,11 +24,39 @@ class ApiService {
 
   Future<Map<String, String>> _getHeaders() async {
     final token = await this.token;
-    return {
+    final headers = <String, String>{
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      if (token != null) 'Authorization': 'Bearer $token',
     };
+    if (token != null && token.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+    return headers;
+  }
+
+  /// Parsea el cuerpo de error de una respuesta HTTP.
+  Map<String, dynamic> _parseErrorResponse(http.Response response) {
+    try {
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    } catch (_) {
+      return {'message': 'Error desconocido'};
+    }
+  }
+
+  /// Limpia completamente el estado de autenticación.
+  Future<void> _clearAuthState() async {
+    _token = null;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('auth_token');
+    await prefs.remove('user_data');
+    await prefs.remove('user_screens');
+  }
+
+  /// Verifica si el token actual es válido. Si no lo es, limpia la sesión.
+  Future<bool> isTokenValid() async {
+    final tokenValue = await token;
+    if (tokenValue == null || tokenValue.isEmpty) return false;
+    return true;
   }
 
   Future<Uri> _url(String path) async {
@@ -37,22 +65,38 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> login(String email, String password) async {
-    final response = await http.post(
-      await _url('auth/login'),
-      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-      body: jsonEncode({'email': email, 'password': password}),
-    );
+    try {
+      final response = await http
+          .post(
+            await _url('auth/login'),
+            headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+            body: jsonEncode({'email': email, 'password': password}),
+          )
+          .timeout(const Duration(seconds: 30));
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      _token = data['token'];
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('auth_token', data['token']);
-      await prefs.setString('user_data', jsonEncode(data['user']));
-      await prefs.setStringList('user_screens', (data['screens'] as List? ?? []).cast<String>());
-      return data;
-    } else {
-      throw Exception('Credenciales incorrectas');
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        _token = data['token'] as String?;
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('auth_token', data['token']);
+        await prefs.setString('user_data', jsonEncode(data['user']));
+        await prefs.setStringList('user_screens', (data['screens'] as List? ?? []).cast<String>());
+        return data;
+      } else if (response.statusCode == 401) {
+        await _clearAuthState();
+        throw Exception('Credenciales incorrectas');
+      } else if (response.statusCode == 500) {
+        final errorData = _parseErrorResponse(response);
+        final errorMessage = errorData['error'] ?? errorData['message'] ?? 'Error interno del servidor';
+        throw Exception(errorMessage);
+      } else {
+        throw Exception('Error al iniciar sesión (${response.statusCode})');
+      }
+    } on TimeoutException {
+      throw Exception('Tiempo de espera agotado. Verifica tu conexión.');
+    } catch (e) {
+      if (e is Exception) rethrow;
+      throw Exception('Error de conexión: $e');
     }
   }
 
@@ -525,14 +569,49 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>> getFleetLive({double radiusKm = 2}) async {
-    final headers = await _getHeaders();
-    final response = await http.get(
-      await _url('fleet/live?radius_km=$radiusKm'),
-      headers: headers,
-    );
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+    const maxRetries = 3;
+    const retryDelay = Duration(seconds: 2);
+
+    for (var attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        final headers = await _getHeaders();
+        final response = await http
+            .get(
+              await _url('fleet/live?radius_km=$radiusKm'),
+              headers: headers,
+            )
+            .timeout(const Duration(seconds: 15));
+
+        if (response.statusCode == 200) {
+          return jsonDecode(response.body) as Map<String, dynamic>;
+        } else if (response.statusCode == 401) {
+          await _clearAuthState();
+          throw Exception('Sesión expirada, vuelve a iniciar sesión');
+        } else if (response.statusCode == 500) {
+          final errorData = _parseErrorResponse(response);
+          final errorMessage = errorData['error'] ?? 'Error interno del servidor';
+          if (attempt < maxRetries) {
+            await Future.delayed(retryDelay * (attempt + 1));
+            continue;
+          }
+          throw Exception(errorMessage);
+        } else {
+          throw Exception('Error al obtener flota en vivo (${response.statusCode})');
+        }
+      } on TimeoutException {
+        if (attempt < maxRetries) {
+          await Future.delayed(retryDelay * (attempt + 1));
+          continue;
+        }
+        throw Exception('Tiempo de espera agotado al obtener flota');
+      } catch (e) {
+        if (attempt < maxRetries && e is! Exception) {
+          await Future.delayed(retryDelay * (attempt + 1));
+          continue;
+        }
+        rethrow;
+      }
     }
-    throw Exception('Error al obtener flota en vivo');
+    throw Exception('No se pudo obtener la flota en vivo');
   }
 }
