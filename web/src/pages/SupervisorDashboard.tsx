@@ -32,6 +32,13 @@ interface PlanningItem {
   status: string
 }
 
+interface PlantPersonnelItem {
+  id: string
+  name: string
+  position?: string | null
+  status: string
+}
+
 interface ReceptionItem {
   id: string
   stage: string
@@ -88,6 +95,7 @@ interface TaskItem {
 type ModalState<T> = { open: boolean; item: T | null }
 
 const emptyPlanning: PlanningItem = { id: '', title: '', activity_type: 'extraccion', planned_date: '', start_time: '', end_time: '', area: '', assigned_person: '', notes: '', status: 'planificado' }
+const emptyPersonnel: PlantPersonnelItem = { id: '', name: '', position: '', status: 'activo' }
 const emptyReception: ReceptionItem = { id: '', stage: 'recepcion', material: '', tonnage: 0, processed_date: '', origin: '', notes: '', status: 'recibido' }
 const emptyBlending: BlendingItem = { id: '', title: '', materials: '', target_spec: null, blend_date: '', notes: '', status: 'planificado' }
 const emptyQuality: QualityItem = { id: '', material: '', purity: null, granulometry: '', industry: '', checked_date: '', notes: '', status: 'pendiente' }
@@ -102,6 +110,7 @@ const stageLabels: Record<string, string> = {
   chancado_primario: 'Chancado primario',
   chancado_secundario: 'Chancado secundario',
 }
+
 const activityLabels: Record<string, string> = {
   extraccion: 'Extracción',
   procesamiento: 'Procesamiento',
@@ -161,6 +170,23 @@ export default function SupervisorDashboard() {
   const queryClient = useQueryClient()
   const [planningModal, setPlanningModal] = useState<ModalState<PlanningItem>>({ open: false, item: null })
   const [receptionModal, setReceptionModal] = useState<ModalState<ReceptionItem>>({ open: false, item: null })
+  const [personnelModal, setPersonnelModal] = useState<ModalState<PlantPersonnelItem>>({ open: false, item: null })
+
+  const defaultStageLabels = { ...stageLabels }
+  const [customStages, setCustomStages] = useState<Record<string, string>>(() => {
+    try {
+      const saved = localStorage.getItem('customStages')
+      return saved ? JSON.parse(saved) : {}
+    } catch { return {} }
+  })
+  const allStageLabels = { ...defaultStageLabels, ...customStages }
+  const saveCustomStages = (stages: Record<string, string>) => {
+    setCustomStages(stages)
+    localStorage.setItem('customStages', JSON.stringify(stages))
+  }
+  const [stageManagerOpen, setStageManagerOpen] = useState(false)
+  const [newStage, setNewStage] = useState({ key: '', label: '' })
+  const [editingStageKey, setEditingStageKey] = useState<string | null>(null)
   const [blendingModal, setBlendingModal] = useState<ModalState<BlendingItem>>({ open: false, item: null })
   const [qualityModal, setQualityModal] = useState<ModalState<QualityItem>>({ open: false, item: null })
   const [safetyModal, setSafetyModal] = useState<ModalState<SafetyItem>>({ open: false, item: null })
@@ -173,6 +199,7 @@ export default function SupervisorDashboard() {
   })
 
   const { data: planning } = useQuery({ queryKey: ['supervisor-planning'], queryFn: () => supervisorApi.getPlanning().then((r) => r.data) })
+  const { data: personnel } = useQuery({ queryKey: ['supervisor-personnel'], queryFn: () => supervisorApi.getPersonnel().then((r) => r.data) })
   const { data: reception } = useQuery({ queryKey: ['supervisor-reception'], queryFn: () => supervisorApi.getReception().then((r) => r.data) })
   const { data: blending } = useQuery({ queryKey: ['supervisor-blending'], queryFn: () => supervisorApi.getBlending().then((r) => r.data) })
   const { data: quality } = useQuery({ queryKey: ['supervisor-quality'], queryFn: () => supervisorApi.getQuality().then((r) => r.data) })
@@ -182,6 +209,7 @@ export default function SupervisorDashboard() {
   const invalidateAll = () => {
     queryClient.invalidateQueries({ queryKey: ['supervisor-summary'] })
     queryClient.invalidateQueries({ queryKey: ['supervisor-planning'] })
+    queryClient.invalidateQueries({ queryKey: ['supervisor-personnel'] })
     queryClient.invalidateQueries({ queryKey: ['supervisor-reception'] })
     queryClient.invalidateQueries({ queryKey: ['supervisor-blending'] })
     queryClient.invalidateQueries({ queryKey: ['supervisor-quality'] })
@@ -194,6 +222,12 @@ export default function SupervisorDashboard() {
     onSuccess: () => { setPlanningModal({ open: false, item: null }); invalidateAll() },
   })
   const deletePlanning = useMutation({ mutationFn: (id: string) => supervisorApi.deletePlanning(id), onSuccess: () => invalidateAll() })
+
+  const savePersonnel = useMutation({
+    mutationFn: ({ id, data }: { id?: string; data: any }) => id ? supervisorApi.updatePersonnel(id, data) : supervisorApi.createPersonnel(data),
+    onSuccess: () => { setPersonnelModal({ open: false, item: null }); invalidateAll() },
+  })
+  const deletePersonnel = useMutation({ mutationFn: (id: string) => supervisorApi.deletePersonnel(id), onSuccess: () => invalidateAll() })
 
   const saveReception = useMutation({
     mutationFn: ({ id, data }: { id?: string; data: any }) => id ? supervisorApi.updateReception(id, data) : supervisorApi.createReception(data),
@@ -266,9 +300,14 @@ export default function SupervisorDashboard() {
               </h2>
               <p className="text-sm text-gray-500">Actividades diarias del personal según los planes de extracción y procesamiento.</p>
             </div>
-            <button onClick={() => setPlanningModal({ open: true, item: { ...emptyPlanning } })} className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium">
-              <Plus className="w-4 h-4" /> Planificar
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <button onClick={() => setPersonnelModal({ open: true, item: { ...emptyPersonnel } })} className="flex items-center gap-2 px-3 py-2 text-indigo-600 border border-indigo-200 rounded-lg hover:bg-indigo-50 dark:text-indigo-400 dark:border-indigo-900 dark:hover:bg-indigo-900/30 text-sm font-medium" title="Gestionar personal de planta">
+                <Users className="w-4 h-4" /> <span className="hidden sm:inline">Personal</span>
+              </button>
+              <button onClick={() => setPlanningModal({ open: true, item: { ...emptyPlanning } })} className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium">
+                <Plus className="w-4 h-4" /> Planificar
+              </button>
+            </div>
           </div>
           <div className="p-5">
             {(planning ?? []).length === 0 ? (
@@ -310,9 +349,15 @@ export default function SupervisorDashboard() {
               </h2>
               <p className="text-sm text-gray-500">Recepción de la caliza y chancado primario y secundario para asegurar el abastecimiento.</p>
             </div>
-            <button onClick={() => setReceptionModal({ open: true, item: { ...emptyReception } })} className="flex items-center gap-2 px-3 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 text-sm font-medium">
-              <Plus className="w-4 h-4" /> Registrar
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <button onClick={() => { setNewStage({ key: '', label: '' }); setEditingStageKey(null); setStageManagerOpen(true) }} className="p-2 text-green-600 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-lg transition-colors" title="Gestionar etapas (Añadir/Editar/Eliminar)">
+                <Plus className="w-5 h-5" />
+                <span className="hidden sm:inline"> Etapas</span>
+              </button>
+              <button onClick={() => setReceptionModal({ open: true, item: { ...emptyReception } })} className="flex items-center gap-2 px-3 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 text-sm font-medium">
+                <Plus className="w-4 h-4" /> <span className="hidden sm:inline">Registrar</span>
+              </button>
+            </div>
           </div>
           <div className="p-5">
             {(reception ?? []).length === 0 ? (
@@ -320,32 +365,34 @@ export default function SupervisorDashboard() {
             ) : (
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
-                  <thead>
-                    <tr className="text-left text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                      <th className="px-3 py-2">Etapa</th>
-                      <th className="px-3 py-2">Material</th>
-                      <th className="px-3 py-2 text-right">Tonelaje</th>
-                      <th className="px-3 py-2">Fecha</th>
-                      <th className="px-3 py-2">Estado</th>
-                      <th className="px-3 py-2 text-right">Acción</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
-                    {(reception ?? []).map((r: ReceptionItem) => (
-                      <tr key={r.id} className="text-sm text-gray-700 dark:text-gray-300">
-                        <td className="px-3 py-3">{stageLabels[r.stage] || r.stage}</td>
-                        <td className="px-3 py-3 font-medium">{r.material}</td>
-                        <td className="px-3 py-3 text-right font-semibold">{Number(r.tonnage || 0).toLocaleString('es-MX')} t</td>
-                        <td className="px-3 py-3">{fmtDate(r.processed_date)}</td>
-                        <td className="px-3 py-3"><span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusColors[r.status] || ''}`}>{r.status}</span></td>
-                        <td className="px-3 py-3 text-right">
-                          <button onClick={() => setReceptionModal({ open: true, item: r })} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg dark:hover:bg-blue-900/30"><Pencil className="w-4 h-4" /></button>
-                          <button onClick={() => deleteReception.mutate(r.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg dark:hover:bg-red-900/30"><Trash2 className="w-4 h-4" /></button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <thead>
+                  <tr className="text-left text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className="px-3 py-2">Etapa</th>
+                    <th className="px-3 py-2">Material</th>
+                    <th className="px-3 py-2 text-right">Tonelaje</th>
+                    <th className="px-3 py-2">Fecha</th>
+                    <th className="px-3 py-2">Estado</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+                      {(reception ?? []).map((r: ReceptionItem) => (
+                        <tr key={r.id} className="text-sm text-gray-700 dark:text-gray-300">
+                          <td className="px-3 py-4 min-h-[72px]">
+                            {stageLabels[r.stage] || r.stage}
+                            <div className="flex gap-2 mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                              <button onClick={() => setReceptionModal({ open: true, item: r })} className="p-2 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors" title="Editar"><Pencil className="w-4 h-4" /></button>
+                              <button onClick={() => setReceptionModal({ open: true, item: r })} className="p-2 text-orange-600 hover:bg-orange-100 dark:hover:bg-orange-900/30 rounded-lg transition-colors" title="Modificar"><Pencil className="w-4 h-4" /></button>
+                              <button onClick={() => deleteReception.mutate(r.id)} className="p-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors" title="Eliminar"><Trash2 className="w-4 h-4" /></button>
+                            </div>
+                          </td>
+                          <td className="px-3 py-3 font-medium">{r.material}</td>
+                          <td className="px-3 py-3 text-right font-semibold">{Number(r.tonnage || 0).toLocaleString('es-MX')} t</td>
+                          <td className="px-3 py-3">{fmtDate(r.processed_date)}</td>
+                          <td className="px-3 py-3"><span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusColors[r.status] || ''}`}>{r.status}</span></td>
+                        </tr>
+                      ))}
+                </tbody>
+              </table>
               </div>
             )}
           </div>
@@ -361,9 +408,15 @@ export default function SupervisorDashboard() {
             </h2>
             <p className="text-sm text-gray-500">Supervisa la mezcla de materias primas para cumplir las especificaciones técnicas del producto final.</p>
           </div>
-          <button onClick={() => setBlendingModal({ open: true, item: { ...emptyBlending } })} className="flex items-center gap-2 px-3 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 text-sm font-medium">
-            <Plus className="w-4 h-4" /> Nueva mezcla
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+              <button onClick={() => { setNewStage({ key: '', label: '' }); setEditingStageKey(null); setStageManagerOpen(true) }} className="p-2 text-green-600 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-lg transition-colors" title="Gestionar etapas (Añadir/Editar/Eliminar)">
+                <Plus className="w-5 h-5" />
+                <span className="hidden sm:inline"> Etapas</span>
+              </button>
+              <button onClick={() => setBlendingModal({ open: true, item: { ...emptyBlending } })} className="flex items-center gap-2 px-3 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 text-sm font-medium">
+                <Plus className="w-4 h-4" /> <span className="hidden sm:inline">Nueva mezcla</span>
+              </button>
+            </div>
         </div>
         <div className="p-5">
           {(blending ?? []).length === 0 ? (
@@ -371,7 +424,7 @@ export default function SupervisorDashboard() {
           ) : (
             <div className="space-y-2">
               {(blending ?? []).map((b: BlendingItem) => (
-                <div key={b.id} className="flex items-center justify-between flex-wrap gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
+                <div key={b.id} className="flex flex-col gap-2 p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <p className="font-medium text-gray-900 dark:text-white">{b.title}</p>
@@ -382,10 +435,11 @@ export default function SupervisorDashboard() {
                       {b.materials ? <span className="ml-2">· {b.materials}</span> : null}
                       {b.target_spec != null ? <span className="ml-2">· Espec. {b.target_spec}</span> : null}
                     </p>
-                  </div>
-                  <div className="flex items-center gap-1 flex-shrink-0">
-                    <button onClick={() => setBlendingModal({ open: true, item: b })} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg dark:hover:bg-blue-900/30"><Pencil className="w-4 h-4" /></button>
-                    <button onClick={() => deleteBlending.mutate(b.id)} className="p-2 text-red-500 hover:bg-red-50 rounded-lg dark:hover:bg-red-900/30"><Trash2 className="w-4 h-4" /></button>
+                    <div className="flex gap-2 mt-3 pt-2 border-t border-gray-200 dark:border-gray-700">
+                      <button onClick={() => setBlendingModal({ open: true, item: b })} className="p-2 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors" title="Editar"><Pencil className="w-4 h-4" /></button>
+                      <button onClick={() => setBlendingModal({ open: true, item: b })} className="p-2 text-orange-600 hover:bg-orange-100 dark:hover:bg-orange-900/30 rounded-lg transition-colors" title="Modificar"><Pencil className="w-4 h-4" /></button>
+                      <button onClick={() => deleteBlending.mutate(b.id)} className="p-2 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors" title="Eliminar"><Trash2 className="w-4 h-4" /></button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -533,6 +587,62 @@ export default function SupervisorDashboard() {
       </section>
 
       {/* MODALS */}
+      {personnelModal.open && (
+        <Modal title={personnelModal.item?.id ? 'Editar personal' : 'Añadir personal de planta'} onClose={() => setPersonnelModal({ open: false, item: null })}>
+          <form onSubmit={(e) => { e.preventDefault(); savePersonnel.mutate({ id: personnelModal.item?.id || undefined, data: personnelModal.item }) }} className="space-y-4">
+            <div>
+              <label className={labelCls}>Nombre *</label>
+              <input type="text" required value={personnelModal.item?.name || ''} onChange={(e) => setPersonnelModal({ open: true, item: { ...personnelModal.item!, name: e.target.value } })} className={inputCls} placeholder="Nombre del trabajador" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Puesto</label>
+                <input type="text" value={personnelModal.item?.position || ''} onChange={(e) => setPersonnelModal({ open: true, item: { ...personnelModal.item!, position: e.target.value } })} className={inputCls} placeholder="Operador, chancador..." />
+              </div>
+              <div>
+                <label className={labelCls}>Estado</label>
+                <select value={personnelModal.item?.status || 'activo'} onChange={(e) => setPersonnelModal({ open: true, item: { ...personnelModal.item!, status: e.target.value } })} className={inputCls}>
+                  {['activo', 'inactivo'].map((s) => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
+            </div>
+            {savePersonnel.isError && <p className="text-sm text-red-600">{errMsg(savePersonnel.error, 'Error al guardar el personal.')}</p>}
+            <div className="flex justify-end gap-2 pt-2">
+              <button type="button" onClick={() => setPersonnelModal({ open: false, item: null })} className="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800">Cancelar</button>
+              <button type="submit" disabled={savePersonnel.isPending} className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 text-sm font-medium">Guardar</button>
+            </div>
+          </form>
+
+          <div className="mt-6 pt-5 border-t border-gray-200 dark:border-gray-800">
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="font-medium text-gray-900 dark:text-white">Personal registrado</h4>
+              <button type="button" onClick={() => setPersonnelModal({ open: true, item: { ...emptyPersonnel } })} className="flex items-center gap-1 px-2 py-1 text-green-600 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-lg text-sm" title="Añadir"><Plus className="w-4 h-4" /> Añadir</button>
+            </div>
+            {(personnel ?? []).length === 0 ? (
+              <p className="text-sm text-gray-500 dark:text-gray-400">No hay personal registrado.</p>
+            ) : (
+              <div className="space-y-2 max-h-60 overflow-y-auto">
+                {(personnel ?? []).map((p: PlantPersonnelItem) => (
+                  <div key={p.id} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{p.name}</p>
+                      <div className="flex items-center gap-2">
+                        {p.position ? <span className="text-xs text-gray-500 dark:text-gray-400 truncate">{p.position}</span> : null}
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${p.status === 'activo' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-300'}`}>{p.status}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 flex-shrink-0">
+                      <button onClick={() => setPersonnelModal({ open: true, item: { ...p, name: p.name } })} className="p-1.5 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded" title="Editar"><Pencil className="w-4 h-4" /></button>
+                      <button onClick={() => deletePersonnel.mutate(p.id)} className="p-1.5 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 rounded" title="Eliminar"><Trash2 className="w-4 h-4" /></button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </Modal>
+      )}
+
       {planningModal.open && (
         <Modal title={planningModal.item?.id ? 'Editar actividad' : 'Planificar actividad'} onClose={() => setPlanningModal({ open: false, item: null })}>
           <form onSubmit={(e) => { e.preventDefault(); savePlanning.mutate({ id: planningModal.item?.id || undefined, data: planningModal.item }) }} className="space-y-4">
@@ -576,7 +686,15 @@ export default function SupervisorDashboard() {
             </div>
             <div>
               <label className={labelCls}>Personal asignado</label>
-              <input type="text" value={planningModal.item?.assigned_person || ''} onChange={(e) => setPlanningModal({ open: true, item: { ...planningModal.item!, assigned_person: e.target.value } })} className={inputCls} />
+              <select value={planningModal.item?.assigned_person || ''} onChange={(e) => setPlanningModal({ open: true, item: { ...planningModal.item!, assigned_person: e.target.value } })} className={inputCls}>
+                <option value="">— Seleccione —</option>
+                {(personnel ?? []).filter((p: PlantPersonnelItem) => p.status === 'activo').map((p: PlantPersonnelItem) => (
+                  <option key={p.id} value={p.name}>{p.name}</option>
+                ))}
+              </select>
+              {(personnel ?? []).filter((p: PlantPersonnelItem) => p.status === 'activo').length === 0 && (
+                <p className="text-xs text-amber-600 mt-1 dark:text-amber-400">No hay personal de planta registrado. Usa el botón "Personal" para añadirlo.</p>
+              )}
             </div>
             <div>
               <label className={labelCls}>Notas</label>
@@ -595,11 +713,14 @@ export default function SupervisorDashboard() {
         <Modal title={receptionModal.item?.id ? 'Editar registro' : 'Registrar recepción/trituración'} onClose={() => setReceptionModal({ open: false, item: null })}>
           <form onSubmit={(e) => { e.preventDefault(); saveReception.mutate({ id: receptionModal.item?.id || undefined, data: receptionModal.item }) }} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
-              <div>
+              <div className="relative">
                 <label className={labelCls}>Etapa</label>
-                <select value={receptionModal.item?.stage || 'recepcion'} onChange={(e) => setReceptionModal({ open: true, item: { ...receptionModal.item!, stage: e.target.value } })} className={inputCls}>
-                  {Object.entries(stageLabels).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-                </select>
+                <div className="flex gap-2">
+                  <select value={receptionModal.item?.stage || 'recepcion'} onChange={(e) => setReceptionModal({ open: true, item: { ...receptionModal.item!, stage: e.target.value } })} className={`${inputCls} flex-1`}>
+                    {Object.entries(allStageLabels).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+                  </select>
+                  <button type="button" onClick={() => { setNewStage({ key: '', label: '' }); setEditingStageKey(null); setStageManagerOpen(true) }} className="p-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg transition-colors" title="Gestionar etapas"><Plus className="w-5 h-5" /></button>
+                </div>
               </div>
               <div>
                 <label className={labelCls}>Estado</label>
@@ -636,6 +757,72 @@ export default function SupervisorDashboard() {
               <button type="submit" disabled={saveReception.isPending} className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 disabled:opacity-50 text-sm font-medium">Guardar</button>
             </div>
           </form>
+        </Modal>
+      )}
+
+      {stageManagerOpen && (
+        <Modal title="Gestionar Etapas" onClose={() => { setStageManagerOpen(false); setNewStage({ key: '', label: '' }); setEditingStageKey(null) }}>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400">Añade, edita o elimina etapas personalizadas. Las predeterminadas (Recepción, Chancado primario, Chancado secundario) no se pueden eliminar.</p>
+            
+            <div className="space-y-2">
+              <h4 className="font-medium text-gray-900 dark:text-white">Añadir nueva etapa</h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className={labelCls}>Clave (sin espacios)</label>
+                  <input type="text" value={newStage.key} onChange={(e) => setNewStage({ ...newStage, key: e.target.value.toLowerCase().replace(/\s+/g, '_') })} className={inputCls} placeholder="ej: chancado_terciario" disabled={!!editingStageKey} />
+                </div>
+                <div>
+                  <label className={labelCls}>Nombre visible</label>
+                  <input type="text" value={newStage.label} onChange={(e) => setNewStage({ ...newStage, label: e.target.value })} className={inputCls} placeholder="ej: Chancado terciario" />
+                </div>
+              </div>
+              <div className="flex justify-end gap-2">
+                <button type="button" onClick={() => { setNewStage({ key: '', label: '' }); setEditingStageKey(null); setStageManagerOpen(false) }} className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800">Cancelar</button>
+                <button type="button" onClick={() => {
+                  if (newStage.key && newStage.label) {
+                    const updated = { ...customStages }
+                    if (editingStageKey && editingStageKey !== newStage.key) {
+                      delete updated[editingStageKey]
+                    }
+                    updated[newStage.key] = newStage.label
+                    saveCustomStages(updated)
+                    setNewStage({ key: '', label: '' })
+                    setEditingStageKey(null)
+                  }
+                }} className="px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium" disabled={!newStage.key || !newStage.label}>
+                  {editingStageKey ? 'Actualizar' : 'Añadir'}
+                </button>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+              <h4 className="font-medium text-gray-900 dark:text-white mb-2">Etapas personalizadas</h4>
+              {Object.keys(customStages).length === 0 ? (
+                <p className="text-sm text-gray-500 dark:text-gray-400">No hay etapas personalizadas. Las predeterminadas se muestran en el selector.</p>
+              ) : (
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {Object.entries(customStages).map(([key, label]) => (
+                    <div key={key} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <code className="text-xs bg-gray-200 dark:bg-gray-700 px-1.5 py-0.5 rounded">{key}</code>
+                        <span className="text-sm font-medium">{label}</span>
+                        <span className="text-xs text-green-600 dark:text-green-400">Personalizada</span>
+                      </div>
+                      <div className="flex gap-1">
+                        <button onClick={() => { setNewStage({ key, label }); setEditingStageKey(key) }} className="p-1.5 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded" title="Editar"><Pencil className="w-4 h-4" /></button>
+                        <button onClick={() => {
+                          const updated = { ...customStages }
+                          delete updated[key]
+                          saveCustomStages(updated)
+                        }} className="p-1.5 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/30 rounded" title="Eliminar"><Trash2 className="w-4 h-4" /></button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </Modal>
       )}
 

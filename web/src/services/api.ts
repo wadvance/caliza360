@@ -345,6 +345,11 @@ export const secretaryApi = {
 // Espacio de trabajo del supervisor de planta (producción, calidad, seguridad, equipo)
 export const supervisorApi = {
   getSummary: () => api.get('/supervisor/summary'),
+  // Personal de planta
+  getPersonnel: (params?: any) => api.get('/supervisor/personnel', { params }),
+  createPersonnel: (data: any) => api.post('/supervisor/personnel', data),
+  updatePersonnel: (id: string, data: any) => api.put(`/supervisor/personnel/${id}`, data),
+  deletePersonnel: (id: string) => api.delete(`/supervisor/personnel/${id}`),
   // Planificación de actividades
   getPlanning: (params?: any) => api.get('/supervisor/planning', { params }),
   createPlanning: (data: any) => api.post('/supervisor/planning', data),
