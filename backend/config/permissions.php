@@ -21,12 +21,14 @@ return [
             'clients', 'suppliers', 'inventory', 'invoices', 'accounting',
             'payroll', 'reports', 'ai', 'settings', 'settings-email', 'users',
             'proformas', 'controls', 'dispatches', 'notes', 'extra-payments', 'petty-cash',
+            'personnel',
         ],
         'admin' => [
             'dashboard', 'trucks', 'drivers', 'trips', 'live-map',
             'clients', 'suppliers', 'inventory', 'invoices', 'accounting',
             'payroll', 'reports', 'ai', 'settings', 'settings-email', 'users',
             'proformas', 'controls', 'dispatches', 'notes', 'extra-payments', 'petty-cash',
+            'personnel',
         ],
         'dispatcher' => [
             'dashboard', 'trucks', 'drivers', 'trips',
@@ -43,7 +45,7 @@ return [
             'accountant-workspace',
         ],
         'secretary' => [
-            'dashboard', 'notes', 'whatsapp', 'secretary-workspace',
+            'dashboard', 'notes', 'whatsapp', 'secretary-workspace', 'personnel',
         ],
         'driver' => [
             'dashboard', 'trips', 'proformas',

@@ -13,6 +13,12 @@ class PlantPersonnel extends Model
 
     protected $fillable = [
         'name',
+        'cedula',
+        'edad',
+        'direccion',
+        'celular',
+        'tipo_sangre',
+        'tipo',
         'position',
         'status',
         'created_by',

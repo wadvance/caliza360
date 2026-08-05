@@ -66,6 +66,12 @@ class SupervisorDashboardController extends Controller
     {
         return $request->validate([
             'name' => 'required|string|max:255',
+            'cedula' => 'nullable|string|max:20',
+            'edad' => 'nullable|integer|min:18|max:80',
+            'direccion' => 'nullable|string|max:255',
+            'celular' => 'nullable|string|max:15',
+            'tipo_sangre' => 'nullable|string|max:5',
+            'tipo' => 'sometimes|in:administrativo,planta',
             'position' => 'nullable|string|max:255',
             'status' => 'sometimes|in:' . implode(',', PlantPersonnel::STATUSES),
         ]);

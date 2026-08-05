@@ -11,6 +11,12 @@ return new class extends Migration
         Schema::create('plant_personnel', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('cedula')->nullable();
+            $table->integer('edad')->nullable();
+            $table->string('direccion')->nullable();
+            $table->string('celular')->nullable();
+            $table->string('tipo_sangre')->nullable();
+            $table->enum('tipo', ['administrativo', 'planta'])->default('planta');
             $table->string('position')->nullable();
             $table->enum('status', ['activo', 'inactivo'])->default('activo');
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();

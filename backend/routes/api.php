@@ -321,9 +321,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/summary', [SupervisorDashboardController::class, 'summary']);
 
         Route::get('/personnel', [SupervisorDashboardController::class, 'personnelIndex']);
-        Route::post('/personnel', [SupervisorDashboardController::class, 'personnelStore']);
-        Route::put('/personnel/{item}', [SupervisorDashboardController::class, 'personnelUpdate']);
-        Route::delete('/personnel/{item}', [SupervisorDashboardController::class, 'personnelDestroy']);
 
         Route::get('/planning', [SupervisorDashboardController::class, 'planningIndex']);
         Route::post('/planning', [SupervisorDashboardController::class, 'planningStore']);
@@ -354,6 +351,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/tasks', [SupervisorDashboardController::class, 'tasksStore']);
         Route::put('/tasks/{item}', [SupervisorDashboardController::class, 'tasksUpdate']);
         Route::delete('/tasks/{item}', [SupervisorDashboardController::class, 'tasksDestroy']);
+    });
+
+    // Gestión de personal de planta (Super Admin / Admin / Secretaria)
+    Route::middleware('screen:personnel')->prefix('personnel')->group(function () {
+        Route::get('/', [SupervisorDashboardController::class, 'personnelIndex']);
+        Route::post('/', [SupervisorDashboardController::class, 'personnelStore']);
+        Route::put('/{item}', [SupervisorDashboardController::class, 'personnelUpdate']);
+        Route::delete('/{item}', [SupervisorDashboardController::class, 'personnelDestroy']);
     });
 
     // Espacio de trabajo del contador de costos (costos, activos, presupuestos, cumplimiento)
