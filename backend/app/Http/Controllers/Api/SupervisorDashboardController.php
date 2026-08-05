@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\PlantPersonnel;
 use App\Models\SupervisorPlanning;
 use App\Models\SupervisorReception;
 use App\Models\SupervisorBlending;
@@ -19,6 +20,56 @@ class SupervisorDashboardController extends Controller
      * trituración, mezclado), gestión de calidad, seguridad y medio ambiente,
      * y liderazgo de equipo.
      */
+
+    // ============================ PERSONAL DE PLANTA ============================
+
+    public function personnelIndex(Request $request)
+    {
+        $query = PlantPersonnel::with('creator:id,name')->orderBy('name');
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        return response()->json($query->get());
+    }
+
+    public function personnelStore(Request $request)
+    {
+        $data = $this->validatePersonnel($request);
+
+        $item = PlantPersonnel::create([
+            ...$data,
+            'created_by' => $request->user()->id,
+        ]);
+
+        return response()->json($item->load('creator:id,name'), 201);
+    }
+
+    public function personnelUpdate(Request $request, PlantPersonnel $item)
+    {
+        $data = $this->validatePersonnel($request);
+
+        $item->update($data);
+
+        return response()->json($item->load('creator:id,name'));
+    }
+
+    public function personnelDestroy(PlantPersonnel $item)
+    {
+        $item->delete();
+
+        return response()->json(['message' => 'Personal eliminado correctamente']);
+    }
+
+    protected function validatePersonnel(Request $request): array
+    {
+        return $request->validate([
+            'name' => 'required|string|max:255',
+            'position' => 'nullable|string|max:255',
+            'status' => 'sometimes|in:' . implode(',', PlantPersonnel::STATUSES),
+        ]);
+    }
 
     // ============================ PLANIFICACIÓN ============================
 

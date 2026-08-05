@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\SupervisorPlanning;
+use App\Models\PlantPersonnel;
 use App\Models\SupervisorReception;
 use App\Models\SupervisorBlending;
 use App\Models\SupervisorQuality;
@@ -247,5 +248,70 @@ class SupervisorWorkspaceApiTest extends TestCase
         $this->withHeaders(['Authorization' => "Bearer {$adminToken}"])
             ->getJson('/api/supervisor/summary')
             ->assertStatus(403);
+    }
+
+    public function test_supervisor_can_create_personnel(): void
+    {
+        $response = $this->withHeaders($this->authHeaders())
+            ->postJson('/api/supervisor/personnel', [
+                'name' => 'Juan Perez',
+                'position' => 'Operador de planta',
+                'status' => 'activo',
+            ]);
+
+        $response->assertStatus(201)
+            ->assertJsonPath('name', 'Juan Perez')
+            ->assertJsonPath('created_by', $this->supervisor->id);
+
+        $this->assertDatabaseHas('plant_personnel', ['name' => 'Juan Perez']);
+    }
+
+    public function test_supervisor_can_update_and_delete_personnel(): void
+    {
+        $person = PlantPersonnel::create([
+            'name' => 'Maria Lopez',
+            'position' => 'Chancador',
+            'status' => 'activo',
+            'created_by' => $this->supervisor->id,
+        ]);
+
+        $this->withHeaders($this->authHeaders())
+            ->putJson("/api/supervisor/personnel/{$person->id}", [
+                'name' => 'Maria Lopez G.',
+                'position' => 'Supervisora de mezclado',
+                'status' => 'activo',
+            ])
+            ->assertOk()
+            ->assertJsonPath('name', 'Maria Lopez G.');
+
+        $this->withHeaders($this->authHeaders())
+            ->deleteJson("/api/supervisor/personnel/{$person->id}")
+            ->assertOk();
+
+        $this->assertDatabaseMissing('plant_personnel', ['name' => 'Maria Lopez G.']);
+    }
+
+    public function test_personnel_list_is_returned_for_supervisor(): void
+    {
+        PlantPersonnel::create(['name' => 'Pedro Sanchez', 'position' => 'Operador', 'status' => 'activo', 'created_by' => $this->supervisor->id]);
+        PlantPersonnel::create(['name' => 'Ana Torres', 'position' => 'Auxiliar', 'status' => 'inactivo', 'created_by' => $this->supervisor->id]);
+
+        $response = $this->withHeaders($this->authHeaders())
+            ->getJson('/api/supervisor/personnel')
+            ->assertOk();
+
+        $names = collect($response->json())->pluck('name')->all();
+        $this->assertContains('Pedro Sanchez', $names);
+        $this->assertContains('Ana Torres', $names);
+    }
+
+    public function test_personnel_requires_name(): void
+    {
+        $this->withHeaders($this->authHeaders())
+            ->postJson('/api/supervisor/personnel', [
+                'name' => '',
+                'position' => 'Operador',
+            ])
+            ->assertStatus(422);
     }
 }

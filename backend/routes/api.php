@@ -320,6 +320,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('screen:supervisor-workspace')->prefix('supervisor')->group(function () {
         Route::get('/summary', [SupervisorDashboardController::class, 'summary']);
 
+        Route::get('/personnel', [SupervisorDashboardController::class, 'personnelIndex']);
+        Route::post('/personnel', [SupervisorDashboardController::class, 'personnelStore']);
+        Route::put('/personnel/{item}', [SupervisorDashboardController::class, 'personnelUpdate']);
+        Route::delete('/personnel/{item}', [SupervisorDashboardController::class, 'personnelDestroy']);
+
         Route::get('/planning', [SupervisorDashboardController::class, 'planningIndex']);
         Route::post('/planning', [SupervisorDashboardController::class, 'planningStore']);
         Route::put('/planning/{item}', [SupervisorDashboardController::class, 'planningUpdate']);
